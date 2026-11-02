@@ -1,0 +1,10 @@
+# Firmware images and extracted rootfs are never committed (NETGEAR/Voxel binaries).
+*.img
+*.bin
+*.sqfs
+*.sq
+*.tar*
+inputs/
+out/
+build/
+__pycache__/
