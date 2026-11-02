@@ -1,0 +1,20 @@
+name: Bug report
+description: Something in the build script, tools or sync monitor doesn't work
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you ran, what you expected, and what happened instead.
+    validations: { required: true }
+  - type: textarea
+    id: output
+    attributes:
+      label: Output or logs
+      render: text
+  - type: input
+    id: env
+    attributes:
+      label: Environment
+      placeholder: "Ubuntu 24.04, Python 3.12, squashfs-tools 4.6.1"

@@ -14,7 +14,13 @@ Run as root or under fakeroot (unsquashfs has to create /dev nodes):
   fakeroot python3 scripts/build.py --stock ... --donor ... --donor ... -o out/
 Needs: squashfs-tools (unsquashfs, mksquashfs with xz), patch, python3.
 """
-import argparse, hashlib, os, shutil, subprocess, sys, tempfile
+import argparse
+import hashlib
+import os
+import shutil
+import subprocess
+import sys
+import tempfile
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STOCK_MD5 = 'b0c6bf4a4fe9afd405b5a639ed466f82'   # RBS20-V2.7.6.6.img, 20,709,505 bytes

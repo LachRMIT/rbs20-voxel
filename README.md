@@ -1,120 +1,264 @@
-# RBS20 Voxel: custom firmware for the NETGEAR Orbi RBS20 satellite
+<div align="center">
 
-Custom firmware for the NETGEAR Orbi **RBS20** satellite (and an **RBR20 router converted into an RBS20**), so it can join a mesh of Orbi units running Voxel's custom firmware. Voxel has no RBS20 build. This project reverse-engineers the Orbi image format and grafts Voxel's mesh stack and tools onto NETGEAR's last RBS20 release. It also adds a live web dashboard for watching a satellite sync.
+<img src="docs/images/banner.svg" alt="RBS20 Voxel" width="100%">
 
-**Result:** on 2026-10-21 a P8 build running on an RBR20-converted-to-RBS20 synced into a Voxel RBR50v2 mesh on both backhaul bands (5 GHz at -52 dBm and 867 Mb/s, 2.4 GHz at -36 dBm).
+**Custom firmware that puts Voxel's Orbi mesh stack on the NETGEAR RBS20, a satellite Voxel never supported.**
 
-![Sync monitor](docs/images/sync-monitor.png)
-*The sync monitor (port 8080), shown here in the ARM emulator used to test it before it went on hardware.*
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+![Python 3.8+](https://img.shields.io/badge/python-3.8%2B-3776AB?logo=python&logoColor=white)
+![Tests: pytest](https://img.shields.io/badge/tests-pytest-0A9EDC?logo=pytest&logoColor=white)
+![Target: IPQ4019](https://img.shields.io/badge/SoC-Qualcomm%20IPQ4019-red)
+![Kernel 3.14.77](https://img.shields.io/badge/kernel-Linux%203.14.77-FCC624?logo=linux&logoColor=black)
+![Status: synced on hardware](https://img.shields.io/badge/status-synced%20on%20hardware-success)
 
-> **No firmware images are in this repo.** They contain NETGEAR and Voxel binaries that I can't redistribute. `scripts/build.py` builds the images from copies you supply. See [NOTICE.md](NOTICE.md) and [SECURITY.md](SECURITY.md).
+[Highlights](#highlights) ·
+[How it works](#how-it-works) ·
+[Quick start](#quick-start) ·
+[Sync monitor](#live-sync-monitor) ·
+[Results](#results) ·
+[Docs](#documentation)
 
-## Why
-My home mesh is an RBR50v2 router and an RBS50v2 satellite, both on Voxel, plus an RBS20 on stock firmware. The RBS20 runs a newer, different build of Qualcomm's mesh (SON) software than the Voxel units, and it has no SSH or diagnostic tools. I wanted the RBS20 on the same mesh stack as the rest of the network, with SSH and iperf3 for testing. I also wanted the same image to work on a spare RBR20 router running as a satellite.
+</div>
 
-## What I worked out
-All of this came from taking images apart. The details are in [docs/](docs/).
+---
 
-- **Image format** ([docs/full-firmware-diff.md](docs/full-firmware-diff.md)). A 128-byte text header (`device`, `version`, `hd_id`), a FIT kernel with 9 IPQ40xx device trees padded to 0x320000, then a 64-byte uImage header whose size and CRC32 cover the rootfs region. Next comes an xz squashfs (256 KiB blocks) with `0xDEADC0DE` padding markers, and a final byte that makes the byte sum 0xFF. [`tools/orbipack.py`](tools/orbipack.py) rebuilds two stock images **byte-for-byte** from their own rootfs, which shows the layout is right.
-- **Router vs satellite.** RBR20 and RBS20 share a board and a kernel. The role is decided at boot by the third letter of the model name read from factory data (`RBR20` vs `RBS20`). Forcing `echo "RBS20"` in `dni_project.sh` turns an RBR20 into a satellite. NETGEAR's own conversion image does the same thing.
-- **Why early builds booted the old firmware.** Orbi has A/B firmware slots. A bootloader (NMRP) flash doesn't flip the `boot_part` flag, so it can write the slot that isn't booted. The web UI upgrader writes the inactive slot and flips the flag, but it also checks that the header's `device` and `hd_id` match the unit. That's why there are three image variants (see below).
-- **What Voxel actually is** ([docs/voxel-vs-stock.md](docs/voxel-vs-stock.md)). A full rebuild with GCC 9.5 on NETGEAR's older 2.5.2.x tree; it shares zero ELF files with stock. Its Wi-Fi drivers are NETGEAR's prebuilt blobs, built for each product. The mesh binaries (`hyd`, `wsplcd`, `hostapd`, `wpa_supplicant`, `lbd` and the SON libraries) are byte-identical across Voxel's RBS50 and LBR20 builds. They also link cleanly against the RBS20's stock uClibc 1.0.14, which is what makes a graft possible.
-- **Why SSH logins failed** (P4, P5). Stock stores root's password as SHA-256 crypt (`$5$`), but this uClibc `libcrypt` only supports MD5 and DES, so dropbear could never verify it. Switching `user-manager.sh` to MD5 crypt fixed it.
+## Overview
 
-## How the build works
-The approach is a **rootfs graft**, not a from-source rebuild. Keep NETGEAR's RBS20 2.7.6.6 kernel, device trees, Wi-Fi drivers and scripts, which match the hardware, and replace or add userland from Voxel.
+Voxel publishes custom firmware for many NETGEAR Orbi models, but not the **RBS20** satellite. My mesh runs a Voxel RBR50v2 router and RBS50v2 satellite, and the RBS20 was the odd one out: it ran a different build of Qualcomm's mesh (SON) software, with no SSH or diagnostic tools.
 
-```
-stock RBS20 2.7.6.6 .img ─┐
-Voxel RBS50 .img ─────────┼─ unsquashfs ─┬─ copy 35 donor files (MD5-checked, manifest/donor-files.txt)
-Voxel LBR20 .img ─────────┘              ├─ apply patches/ (4 small edits to NETGEAR scripts)
-                                         ├─ copy overlay/ (sync monitor, init scripts)
-                                         ├─ rc.d links: dropbear and haveged on, sshenable off
-                                         └─ mksquashfs ─ orbipack.py ─┬─ RBS20-V…img                    (real RBS20)
-                                                                      ├─ RBR20_to_RBS20-V…img           (RBR20 on router firmware)
-                                                                      └─ RBR20_as_RBS20-satupgrade-V…img (RBR20 already a satellite)
-```
+This project reverse-engineers the Orbi firmware image format, grafts Voxel's mesh stack and tools onto NETGEAR's last RBS20 release, and adds a live web dashboard for watching a satellite join the mesh. The same image also turns an **RBR20 router into an RBS20 satellite**.
 
-| From Voxel | Why |
+> [!NOTE]
+> On **2026-10-21** a build from this repo, running on an RBR20 converted to an RBS20, synced into a Voxel RBR50v2 mesh on both backhaul bands: **5 GHz at -52 dBm / 867 Mb/s** and **2.4 GHz at -36 dBm**.
+
+<p align="center">
+  <img src="docs/images/sync-monitor.png" alt="Sync monitor dashboard" width="85%"><br>
+  <sub>The live sync monitor on port 8080, shown in the ARM emulator used to test it before it went on hardware.</sub>
+</p>
+
+## Highlights
+
+| | |
 |---|---|
-| `hyd`, `wsplcd`, `lbd`, `hostapd`, `wpa_supplicant`, `hyctl`, `ucpkgen`, SON libraries | Same mesh stack as the Voxel RBR50/RBS50 for interop |
-| dropbear, haveged, iperf3, nano (+ libhavege, ncurses, terminfo) | SSH, entropy, backhaul speed tests, editing |
-| banner logo, favicon, spinner | Voxel look on the satellite web UI |
+| 🔍 **Reverse-engineered image format** | Header, FIT kernel, uImage CRC, padding and checksum decoded from stock images. [`orbipack.py`](tools/orbipack.py) rebuilds stock firmware **byte-for-byte**. |
+| 🔗 **Voxel mesh interop** | Swaps in the same `hyd`, `wsplcd`, `hostapd` and SON libraries that Voxel's RBK50 builds run, so the satellite speaks the same mesh stack as the router. |
+| 🔁 **Router → satellite conversion** | One boot-script change plus the right header turns an RBR20 into an RBS20, and the image passes NETGEAR's own upgrade checks. |
+| 📡 **Live sync monitor** | A dependency-free BusyBox shell dashboard that shows pairing progress, backhaul signal and rate, mesh daemons, topology and logs in real time. |
+| 🔐 **SSH that actually works** | I traced "permission denied" to SHA-256 crypt hashes that this uClibc can't verify, and fixed it with MD5 crypt. |
+| ✅ **Reproducible, MD5-verified build** | One command builds all three image variants from user-supplied images, checks every donor file's MD5, and is covered by tests. |
+| 🛡️ **Security-audited** | A static audit of stock firmware and of my own builds, with known issues disclosed in [SECURITY.md](SECURITY.md). |
+
+## How it works
+
+The build is a **rootfs graft**, not a from-source rebuild. NETGEAR's kernel, device trees and Wi-Fi drivers match the hardware, so they stay. The userland that matters for mesh interop comes from Voxel.
+
+```mermaid
+flowchart LR
+    subgraph inputs["User-supplied images"]
+        A["Stock RBS20 2.7.6.6<br/><i>kernel, drivers, scripts</i>"]
+        B["Voxel RBS50 / LBR20<br/><i>mesh stack, SSH, tools</i>"]
+    end
+    subgraph repo["This repo"]
+        M["manifest/donor-files.txt<br/>35 files + MD5s"]
+        P["patches/<br/>4 script edits"]
+        O["overlay/<br/>sync monitor, init scripts"]
+    end
+    A --> U["unsquashfs"]
+    B --> U
+    U --> G["graft rootfs"]
+    M --> G
+    P --> G
+    O --> G
+    G --> S["mksquashfs<br/>xz, 256K blocks"]
+    S --> K["orbipack.py<br/>header + uImage CRC + checksum"]
+    K --> V1["RBS20-…img"]
+    K --> V2["RBR20_to_RBS20-…img"]
+    K --> V3["RBR20_as_RBS20-satupgrade-…img"]
+```
+
+<details>
+<summary><b>Firmware image layout</b></summary>
+
+```
+0x000000  ┌──────────────────────────────────────────────┐
+          │ 128 B text header                            │  device:RBS20 / version / region / hd_id
+0x000080  ├──────────────────────────────────────────────┤
+          │ FIT image: kernel@1 (gzip) + 9 IPQ40xx DTBs  │
+          │ zero padding                                 │
+          │ 64 B legacy uImage header                    │  size + CRC32 of the whole rootfs region
+0x320080  ├──────────────────────────────────────────────┤
+          │ squashfs 4.0, xz, 256 KiB blocks             │
+          │ 0xFF padding + 0xDEADC0DE markers            │  4K / 8K / 64K / 128K boundaries
+          │ 128 KiB zero block                           │
+   end-1  ├──────────────────────────────────────────────┤
+          │ 1 B checksum                                 │  0xFF - (sum of all bytes & 0xFF)
+          └──────────────────────────────────────────────┘
+```
+</details>
+
+<details>
+<summary><b>How an RBR20 becomes a satellite</b></summary>
+
+RBR20 and RBS20 share a board, a kernel and every script. The role is decided at boot from the model name in factory (ART) data:
+
+```mermaid
+flowchart TD
+    A["Boot: dni_project.sh<br/>project_boot_stage0"] --> B{"Model name source"}
+    B -- "stock: artmtd -r board_model_id" --> C["RBR20"]
+    B -- "patched: echo RBS20" --> D["RBS20"]
+    C --> E{"3rd letter"}
+    D --> E
+    E -- "R" --> F["orbi_type = Base<br/>router UI, router services"]
+    E -- "S" --> G["orbi_type = Satellite<br/>satellite UI, repacd, wsplcd enrollee"]
+```
+
+Flashing has its own trap. Orbi has **A/B firmware slots**, and a bootloader (NMRP) flash doesn't flip the `boot_part` flag, so the old firmware can keep booting. The web UI upgrader writes the inactive slot and flips the flag, but it checks that the header's `device` matches the running model and `hd_id` matches the board. That's why there are three image variants:
+
+| Unit | Header `device` | Header `hd_id` | Image |
+|---|---|---|---|
+| Real RBS20 | `RBS20` | `…+128+…` | `RBS20-…` |
+| RBR20 on router firmware | `RBR20` | `…+256+…` | `RBR20_to_RBS20-…` |
+| RBR20 already a satellite | `RBS20` | `…+256+…` | `RBR20_as_RBS20-satupgrade-…` |
+</details>
+
+<details>
+<summary><b>What comes from where</b></summary>
+
+| Source | Files | Why |
+|---|---|---|
+| Stock RBS20 2.7.6.6 | kernel, DTBs, Wi-Fi drivers, scripts, web UI | Matches the hardware |
+| Voxel RBS50 / LBR20 | `hyd`, `wsplcd`, `lbd`, `hostapd`, `wpa_supplicant`, `hyctl`, `ucpkgen`, SON libraries | Same mesh stack as the Voxel router |
+| Voxel LBR20 | dropbear, haveged, iperf3, nano, ncurses, terminfo | SSH, entropy, speed tests, editing |
+| Voxel RBS50 | logo, favicon, spinner | Voxel look on the satellite UI |
+| This repo | sync monitor, init scripts, 4 patches | Role fix, SSH fix, monitoring hooks |
 
 | Patch | Change |
 |---|---|
-| `01-dni_project-sh` | Force model `RBS20` so an RBR20 boots as a satellite |
-| `02-user-manager-sh` | MD5 crypt for system passwords; prefer the plaintext admin password |
-| `03-repacd-run-sh` | Publish repacd's state to `/tmp/syncmon_repacd_state` for the monitor |
-| `04-wsplcd` | wsplcd logs at INFO to a file, so config sync can be watched |
+| [`01-dni_project-sh`](patches/01-dni_project-sh.patch) | Force model `RBS20` so an RBR20 boots as a satellite |
+| [`02-user-manager-sh`](patches/02-user-manager-sh.patch) | MD5 crypt for system passwords; prefer the plaintext admin password |
+| [`03-repacd-run-sh`](patches/03-repacd-run-sh.patch) | Publish repacd's state for the monitor |
+| [`04-wsplcd`](patches/04-wsplcd.patch) | wsplcd logs at INFO to a file, so config sync can be watched |
+</details>
 
-### Building
+## Quick start
+
+> [!IMPORTANT]
+> **No firmware images are included.** They contain NETGEAR and Voxel binaries that can't be redistributed ([NOTICE.md](NOTICE.md)). You supply the images, and the script builds the firmware locally.
+
+**Requirements:** Linux, Python 3.8+, `squashfs-tools`, `patch`, `fakeroot`.
+
 ```sh
-# Debian/Ubuntu: sudo apt install squashfs-tools patch fakeroot python3
+git clone https://github.com/LachRMIT/rbs20-voxel && cd rbs20-voxel
+sudo apt install squashfs-tools patch fakeroot
+
+# put your copies of the three images in inputs/, then:
 fakeroot python3 scripts/build.py \
-  --stock  inputs/RBS20-V2.7.6.6.img \
-  --donor  inputs/RBR50_to_RBS50-V9.2.5.2.39SF-HW.img \
-  --donor  inputs/LBR20-V9.2.5.2.57SF-HW.img \
+  --stock inputs/RBS20-V2.7.6.6.img \
+  --donor inputs/RBR50_to_RBS50-V9.2.5.2.39SF-HW.img \
+  --donor inputs/LBR20-V9.2.5.2.57SF-HW.img \
   -o out/
 ```
-The script checks the stock image's MD5 (`b0c6bf4a4fe9afd405b5a639ed466f82`) and every donor file's MD5. I checked it by rebuilding P8 from the stock image: the resulting rootfs matches the P8 that ran on hardware file for file, except for the SSH host key, which is now left out on purpose.
 
-### Flashing
-Use the unit's own web UI (**Firmware Update**), and pick the variant that matches the unit:
-- a real RBS20 takes `RBS20-…`;
-- an RBR20 still on router firmware takes `RBR20_to_RBS20-…`;
-- an RBR20 already running one of these satellite builds takes `RBR20_as_RBS20-satupgrade-…`.
+The script checks the stock image's MD5 (`b0c6bf4a4fe9afd405b5a639ed466f82`) and every donor file against the manifest, then writes the three variants to `out/`.
 
-Then factory-reset the unit (hold reset for about 10 s) and sync it to the router. The upgrade writes the inactive slot, so a web upgrade back to stock undoes it. The serial console is `ttyMSM0`, 115200 8N1, 3.3 V.
+**Flashing:** upload the right variant in the unit's web UI under **Firmware Update**, factory-reset it (hold reset for about 10 s) and sync it to the router. A web upgrade back to stock undoes it. The serial console is `ttyMSM0`, 115200 8N1, 3.3 V.
 
-**Use at your own risk.** Flashing custom firmware can brick a unit and voids the warranty.
+> [!WARNING]
+> Custom firmware can brick a unit and voids the warranty. Set a web admin password before flashing (see [SECURITY.md](SECURITY.md)).
+
+**Running the tests** (no firmware needed):
+
+```sh
+pip install pytest && python3 -m pytest
+```
 
 ## Live sync monitor
-Watching a satellite sync normally means guessing from LED colours. P8 adds a dashboard at `http://<satellite IP>:8080/` (log in as `admin` with the web admin password). It refreshes every 2 s and shows:
-- a progress tracker (Waiting, Pairing, Connected, Settings synced, In mesh) and repacd's state explained in plain English;
-- both backhaul links (router BSSID, signal, PHY rate, frequency) and a signal chart;
-- which mesh daemons are running, and a timestamped event timeline;
-- tabs for the repacd, wsplcd and Wi-Fi logs (passwords and keys masked), the `hyd` 1905 topology, and the satellites linked to this unit.
 
-It is plain BusyBox shell with no new binaries. [`syncmon-watch`](overlay/usr/sbin/syncmon-watch) polls `wpa_cli`, `iwconfig`, `wlanconfig`, `logread` and hyd's debug port into `/tmp/syncmon/state.json`. A second instance of the stock lighttpd serves an auth-gated CGI and a single-file HTML page ([`index.html`](overlay/usr/share/syncmon/index.html)). Before it went on hardware I tested it in a qemu-user ARM chroot running the image's own BusyBox and lighttpd, with only NETGEAR's secure-storage library stubbed out.
+Watching a satellite sync normally means guessing from LED colours. The monitor runs at `http://<satellite IP>:8080/` (log in as `admin` with the web admin password) and refreshes every 2 s.
+
+- **Sync progress:** Waiting → Pairing → Connected → Settings synced → In mesh, with repacd's state explained in plain English
+- **Backhaul links:** router BSSID, signal, PHY rate and frequency for 5 GHz and 2.4 GHz, plus a signal chart
+- **Mesh health:** which daemons are running, and a timestamped event timeline
+- **Deep dives:** repacd, wsplcd and Wi-Fi logs (secrets masked), the `hyd` 1905 topology, and the satellites linked to this unit
+
+It adds no new binaries. [`syncmon-watch`](overlay/usr/sbin/syncmon-watch) is BusyBox shell that polls `wpa_cli`, `iwconfig`, `wlanconfig`, `logread` and hyd's debug port into a JSON file. A second instance of the stock lighttpd serves an auth-gated CGI and a single-file HTML page ([`index.html`](overlay/usr/share/syncmon/index.html)). Before it went on hardware I tested it in a qemu-user ARM chroot running the image's own BusyBox and lighttpd.
 
 ## Results
-| Build | What it was for | Outcome on hardware |
-|---|---|---|
+
+| Build | Change | Outcome on hardware |
+|:---:|---|---|
 | P1 | Stock + dropbear, haveged, iperf3, nano | Booted the old router firmware (A/B slot issue) |
-| P2/P3 | + RBS20 role fix, missing libraries | Same slot issue (NMRP) |
-| P4 | RBR20 header with the board's real `hd_id`, flashed via the web UI | **Booted as a satellite** |
-| P5 | + Voxel mesh stack, SSH using the admin password | SSH still refused (crypt issue) |
-| P6 | MD5 crypt fix | **SSH works** |
-| P7 | Kernel 3.14.77 compiled from NETGEAR's GPL source (-O2, Westwood TCP), 9 device trees byte-identical to stock | Built, not yet tested on hardware |
-| P8 | P6 + sync monitor + Voxel look | **Synced into the Voxel RBR50v2 mesh** |
+| P2–P3 | RBS20 role fix, missing libraries | Same slot issue via NMRP |
+| P4 | RBR20 header with the board's real `hd_id`, web UI flash | ✅ **Booted as a satellite** |
+| P5 | Voxel mesh stack, SSH using the admin password | SSH refused (crypt issue) |
+| P6 | MD5 crypt fix | ✅ **SSH works** |
+| P7 | Kernel 3.14.77 compiled from NETGEAR GPL source (-O2, Westwood TCP) | Built; 9 DTBs byte-identical to stock; not yet flashed |
+| P8 | P6 + sync monitor + Voxel look | ✅ **Synced into the Voxel RBR50v2 mesh** |
 
-The full log is in [docs/build-history.md](docs/build-history.md). In the P8 sync, the first WPS pairing timed out, repacd retried by itself, and the second attempt worked. wsplcd then reported "1905.1 AP Auto Configuration Done", and both backhauls came up: 5 GHz on channel 157 and 2.4 GHz.
+In the P8 sync, the first WPS pairing timed out, repacd retried by itself, and wsplcd then reported *"1905.1 AP Auto Configuration Done"*. Both backhauls came up: 5 GHz on channel 157 and 2.4 GHz. The full log is in [docs/build-history.md](docs/build-history.md).
 
-## Known limitations
-- **NETGEAR's "Config Sync" doesn't complete.** The 1905 mesh config sync succeeds, but the RBR50's own SOAP-based sync status for this unit stays at "not done" (`/tmp/soapclient/allconfig_result` = 1), so the router's UI keeps showing "Config Sync". P8 ships the stock RBS20 SOAP handler. Swapping in Voxel's version is the next experiment.
-- **No band steering:** `lbd` stays stopped on the satellite.
-- **Tested only on an RBR20 converted to an RBS20.** A real RBS20 takes the same rootfs, but that variant hasn't been flashed yet. The P7 kernel hasn't been tested either.
-- **Not a from-source Voxel build.** That would need NETGEAR's RBK20 GPL tree rebuilt with Voxel's toolchain and patches, which aren't public.
-- **Open security issues** in the SSH and monitor setup: see [SECURITY.md](SECURITY.md).
+## Roadmap
 
-## Other write-ups
-- [docs/security-audit.md](docs/security-audit.md): a static audit of the stock firmware and of my own builds.
-- [docs/daisy-chain-sync.md](docs/daisy-chain-sync.md): how a satellite can onboard another satellite when the router is out of range, traced through the firmware scripts.
-- [docs/raw/](docs/raw/): kernel configs, package lists and file diffs used in the analysis.
+- [x] Decode the Orbi image format and rebuild stock byte-for-byte
+- [x] Convert an RBR20 to a satellite via the web UI
+- [x] Working root SSH
+- [x] Voxel mesh stack syncing with a Voxel RBR50v2
+- [x] Live sync monitor
+- [x] Reproducible build from user-supplied images
+- [ ] Bind SSH and the monitor to the LAN only and remove the password fallback ([SECURITY.md](SECURITY.md))
+- [ ] Get NETGEAR's SOAP "Config Sync" status to complete (try Voxel's SOAP handler)
+- [ ] Enable band steering (`lbd`) on the satellite
+- [ ] Flash and test on a real RBS20
+- [ ] Hardware-test the from-source P7 kernel
+
+<details>
+<summary><b>Known limitations</b></summary>
+
+- The 1905 mesh config sync works, but the RBR50's SOAP-based sync status for this unit stays at "not done", so the router UI keeps showing "Config Sync".
+- `lbd` (band steering) stays stopped on the satellite.
+- Tested on an RBR20 converted to an RBS20. A real RBS20 takes the same rootfs but hasn't been flashed yet.
+- Not a from-source Voxel build: that needs NETGEAR's RBK20 GPL tree rebuilt with Voxel's toolchain and patches, which aren't public.
+</details>
+
+## Documentation
+
+| Document | What's in it |
+|---|---|
+| [Full firmware diff](docs/full-firmware-diff.md) | Image format, what a router→satellite conversion changes, what Voxel changes, A/B slots |
+| [Voxel vs stock](docs/voxel-vs-stock.md) | Which Voxel components are reusable on the RBS20 and why |
+| [Security audit](docs/security-audit.md) | Static audit of stock 2.7.6.6 and of the P6/P8 builds |
+| [Daisy-chain sync](docs/daisy-chain-sync.md) | How a satellite onboards another satellite when the router is out of range |
+| [Build history](docs/build-history.md) | Every prototype, P1 to P8, with checksums |
+| [Raw data](docs/raw/) | Kernel configs, package lists, file diffs |
+
+## Skills demonstrated
+
+- **Firmware reverse engineering:** binary format analysis (FIT, uImage, squashfs, custom headers and checksums), diffing four firmware images at the file, package, kernel-config and device-tree level
+- **Embedded Linux:** OpenWrt/QSDK init system, BusyBox, uClibc, cross-compiling a 3.14 kernel with a vendor toolchain in a chroot, ABI and symbol checks of foreign binaries
+- **Networking:** Wi-Fi mesh internals (Qualcomm SON, IEEE 1905.1, WPS, wpa_supplicant/hostapd), backhaul diagnostics
+- **Debugging:** root-causing a boot-slot trap and an SSH auth failure from the firmware scripts, and confirming the fixes on hardware
+- **Security:** auditing for embedded secrets and exposed services, then responsibly disclosing issues in my own builds
+- **Tooling:** Python build and packing tools with tests, a shell and HTML monitoring dashboard, emulator-based testing with qemu-user
 
 ## Repository layout
+
 ```
 scripts/build.py          build images from user-supplied stock + Voxel images
 tools/orbipack.py         Orbi RBx20 image packer (header, uImage CRC, padding, checksum)
 manifest/donor-files.txt  files taken from Voxel, with MD5s
 patches/                  edits to NETGEAR scripts
 overlay/                  files added to the rootfs (sync monitor, init scripts)
-docs/                     analysis, audit, build history
+tests/                    pytest suite (synthetic images, manifest and patch checks)
+docs/                     analysis, audit, build history, images
 ```
 
+## Contributing
+
+Hardware test reports are the most useful contribution, especially from a real RBS20. See [CONTRIBUTING.md](CONTRIBUTING.md).
+
 ## Licence
-My code and docs are MIT ([LICENSE](LICENSE)). NETGEAR and Voxel material is not included; see [NOTICE.md](NOTICE.md). This project is not affiliated with NETGEAR or Voxel.
+
+My code and docs are MIT ([LICENSE](LICENSE)). NETGEAR and Voxel material is not included; see [NOTICE.md](NOTICE.md). Not affiliated with NETGEAR or Voxel. Thanks to Voxel for the firmware this builds on.
 
 ## Generative AI declaration
 I used generative AI (Anthropic's Claude) as an assistant on this project: to help analyse the firmware images, write the build and monitor scripts, and draft the documentation. I set the goals, did all the flashing and testing on my own hardware, and reviewed everything published here.
