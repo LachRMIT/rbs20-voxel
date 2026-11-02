@@ -1,0 +1,48 @@
+# Files the build takes from the Voxel donor images (not stored in this repo).
+# F <path> <md5> <mode>   |   L <path> <symlink target>
+F etc/init.d/haveged 4809f465569e774aeb2820454e54be5f 755
+F usr/bin/dropbearmulti 4414a8d66227a76779f73bac4e63a8bf 755
+F usr/bin/iperf3 ee9c87b5b895d682dc95a9a3136f7fb6 755
+F usr/bin/nano bda29f0f2185ad685e554517329e0d72 755
+F usr/lib/libhavege.so.2.0.0 95c8d3adea4989021c9875a5c7f041b1 755
+F usr/lib/libhyfi-bridge.so db9735ce1516a2486c482d703d87a9bd 755
+F usr/lib/libhyficommon.so a98d34a30264fca987d7721f6cae11c9 755
+F usr/lib/libieee1905.so b124fd030d6697935781a20869480c44 755
+F usr/lib/liblbcmnlibs.so ea7fd64a44e4cdf89b2a55eb5d1f3a58 755
+F usr/lib/libmcfwdtbleswitch.so 220f4811a2cb38082bcf90392ef1df70 755
+F usr/lib/libmcfwdtblwlan2g.so 1c0828101b1b086ae5ccaa23e7c23bc5 755
+F usr/lib/libmcfwdtblwlan5g.so e74858862748530025702b9b8e02d18c 755
+F usr/lib/libncursesw.so.6.6 907274714c9ba1192bfbc87ec8b74f43 755
+F usr/lib/libpluginManager.so 7cbbf9fc657b1d2a0ca564bc3395b08a 755
+F usr/lib/libpsService.so 3a2dcc313ca317c5184ff229cf89e2f6 755
+F usr/lib/libstorage.so 09834eb603da9ec75df58ec773f29962 755
+F usr/lib/libwpa2.so 96a53660ab60b2648f597350035f2331 755
+F usr/sbin/haveged d05ec8c4bbaac03e0b0790b6e25192bd 755
+F usr/sbin/hostapd 22637e03edec1aa63b0c98757f58e14b 755
+F usr/sbin/hostapd_cli 17a1c1ddb64741f2c584769119d31b06 755
+F usr/sbin/hyctl ed21efdf55aa3a1b0211378e125b4468 755
+F usr/sbin/hyd c869e230da25d48ebc078ef4f257325c 755
+F usr/sbin/lbd 8211fc9396370968a57e080b1f4cac66 755
+F usr/sbin/ucpkgen 01c632c2fca7915a74b3571cb0f4c0a3 755
+F usr/sbin/wpa_cli 5bc6c1927091b6136f10cf1f3e9dbec4 755
+F usr/sbin/wpa_supplicant 00593dc37c8f45257fd18bbf8e4b6d3c 755
+F usr/sbin/wsplcd 3d05eaccd3aa0455134708d4836d07a4 755
+F usr/share/terminfo/a/alacritty 4bda0e85199ad6af30242e9c4c41cbcb 644
+F usr/share/terminfo/f/foot bfc77a2482736033bdc0051066d0813e 644
+F usr/share/terminfo/s/screen-256color da2ab4369461c1f01fbd8b43e992efab 644
+F usr/share/terminfo/t/tmux 08f5f58818add9ac4033000d535b8aa5 644
+F usr/share/terminfo/t/tmux-256color 3683c03291ffb9d64e750a4e9fffd756 644
+F www.satellite/image/favicon.ico 1103a21b61f513ce87399d08da9e3404 644
+F www.satellite/image/logos/genie.png b1231becaed9552022ab1a6c77b62adf 644
+F www.satellite/image/wait30.gif 9e60d625a5140444369e35eb3ec94b29 755
+L usr/bin/dbclient dropbearmulti
+L usr/bin/dropbearconvert dropbearmulti
+L usr/bin/dropbearkey dropbearmulti
+L usr/bin/scp dropbearmulti
+L usr/bin/ssh dropbearmulti
+L usr/lib/libhavege.so libhavege.so.2.0.0
+L usr/lib/libhavege.so.2 libhavege.so.2.0.0
+L usr/lib/libncurses.so.6 libncursesw.so.6
+L usr/lib/libncurses.so.6.6 libncursesw.so.6.6
+L usr/lib/libncursesw.so.6 libncursesw.so.6.6
+L usr/sbin/dropbear ../bin/dropbearmulti
