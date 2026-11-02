@@ -1,0 +1,26 @@
+--- a/usr/sbin/repacd-run.sh
++++ b/usr/sbin/repacd-run.sh
+@@ -289,6 +289,7 @@
+     __repacd_info "Setting initial LED states to $new_state"
+     repacd_led_set_states $new_state
+     cur_state=$new_state
++    echo "$cur_state" > /tmp/syncmon_repacd_state
+ else
+     __repacd_info "Failed to resolve STA interface; will attempt periodically"
+ fi
+@@ -353,6 +354,7 @@
+             fi
+ 
+             cur_state=$new_state
++            echo "$cur_state" > /tmp/syncmon_repacd_state
+ 
+             solid_times=0
+             if [ "$blink_times" -gt 0 -a "$cur_state" = "Measuring" ]; then
+@@ -587,6 +589,7 @@
+             __repacd_info "Setting initial LED states to $new_state"
+             repacd_led_set_states $new_state
+             cur_state=$new_state
++            echo "$cur_state" > /tmp/syncmon_repacd_state
+         fi
+     fi
+ 

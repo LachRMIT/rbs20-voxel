@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Orbi Sync Monitor</title>
+<style>
+:root{--bg:#f4f5f7;--card:#fff;--ink:#1d2330;--mute:#6b7280;--line:#e3e6eb;--ok:#14935a;--warn:#c27c0e;--bad:#c2372f;--acc:#2a7de1;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+@media (prefers-color-scheme:dark){:root{--bg:#12151b;--card:#1b2029;--ink:#e6e9ef;--mute:#9aa3b2;--line:#2b3240;--ok:#3cc483;--warn:#f0a93b;--bad:#f06a5f;--acc:#5aa2ff}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+header{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:2}
+header h1{font-size:18px;margin:0}header .sub{color:var(--mute);font-size:12px}
+header .sp{flex:1}.live{font-size:12px;color:var(--mute)}.dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--mute);margin-right:6px;vertical-align:middle}
+.dot.on{background:var(--ok);box-shadow:0 0 0 3px color-mix(in srgb,var(--ok) 25%,transparent)}.dot.off{background:var(--bad)}
+button{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:5px 10px;cursor:pointer}
+main{max-width:1200px;margin:0 auto;padding:16px;display:grid;gap:16px;grid-template-columns:repeat(12,1fr)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;grid-column:span 12;min-width:0}
+.c6{grid-column:span 6}.c4{grid-column:span 4}.c8{grid-column:span 8}
+@media (max-width:860px){.c6,.c4,.c8{grid-column:span 12}}
+h2{font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--mute);margin:0 0 10px}
+.stages{display:flex;gap:6px;flex-wrap:wrap}
+.stage{flex:1 1 140px;padding:10px;border-radius:10px;border:1px solid var(--line);color:var(--mute);position:relative}
+.stage b{display:block;color:inherit;font-size:13px}.stage span{font-size:12px}
+.stage.done{border-color:color-mix(in srgb,var(--ok) 50%,var(--line));color:var(--ink)}.stage.done b::before{content:"✓ ";color:var(--ok)}
+.stage.now{border-color:var(--acc);color:var(--ink);background:color-mix(in srgb,var(--acc) 10%,transparent)}.stage.now b::before{content:"● ";color:var(--acc)}
+.stage.fail{border-color:var(--bad);color:var(--ink);background:color-mix(in srgb,var(--bad) 10%,transparent)}.stage.fail b::before{content:"✕ ";color:var(--bad)}
+.verdict{font-size:20px;font-weight:600;margin:4px 0}.explain{color:var(--mute)}
+.kv{display:grid;grid-template-columns:max-content 1fr;gap:4px 14px;font-size:13px}.kv dt{color:var(--mute)}.kv dd{margin:0;font-family:var(--mono);overflow-wrap:anywhere}
+.bar{height:8px;border-radius:4px;background:var(--line);overflow:hidden;margin-top:6px}.bar i{display:block;height:100%;background:var(--ok)}
+.pills{display:flex;gap:6px;flex-wrap:wrap}.pill{font-size:12px;padding:3px 9px;border-radius:999px;border:1px solid var(--line)}
+.pill.up{color:var(--ok);border-color:color-mix(in srgb,var(--ok) 45%,var(--line))}.pill.down{color:var(--bad);border-color:color-mix(in srgb,var(--bad) 45%,var(--line))}
+canvas{width:100%;height:180px;display:block}
+.events{max-height:320px;overflow:auto;font-family:var(--mono);font-size:12px}
+.ev{display:grid;grid-template-columns:70px 70px 1fr;gap:8px;padding:3px 0;border-bottom:1px dashed var(--line)}.ev .t{color:var(--mute)}.ev .s{color:var(--acc)}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}.tabs button.on{background:var(--acc);border-color:var(--acc);color:#fff}
+pre{margin:0;max-height:380px;overflow:auto;font:12px/1.4 var(--mono);white-space:pre-wrap;overflow-wrap:anywhere;background:color-mix(in srgb,var(--line) 35%,transparent);padding:10px;border-radius:8px}
+.err{color:var(--bad)}
+</style>
+</head>
+<body>
+<header>
+<svg width="34" height="34" viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff2d55"/><stop offset=".25" stop-color="#ffcc00"/><stop offset=".5" stop-color="#34c759"/><stop offset=".75" stop-color="#0a84ff"/><stop offset="1" stop-color="#af52de"/></linearGradient></defs><polygon points="50,3 93,27 93,73 50,97 7,73 7,27" fill="url(#g)"/><polygon points="50,22 76,36 50,50 24,36" fill="#d9d9d9"/><polygon points="24,36 50,50 50,80 24,66" fill="#9a9a9a"/><polygon points="76,36 50,50 50,80 76,66" fill="#bdbdbd"/></svg>
+<div><h1>Orbi Sync Monitor</h1><div class="sub" id="unit">connecting…</div></div>
+<div class="sp"></div>
+<span class="live"><span class="dot" id="dot"></span><span id="livetxt">waiting</span></span>
+<button id="pause">Pause</button>
+</header>
+<main>
+<section class="card"><h2>Sync progress</h2><div class="stages" id="stages"></div></section>
+<section class="card c6"><h2>What's happening now</h2><div class="verdict" id="verdict">–</div><div class="explain" id="explain"></div><div class="explain" id="led" style="margin-top:8px"></div></section>
+<section class="card c6"><h2>Mesh programs</h2><div class="pills" id="daemons"></div><dl class="kv" style="margin-top:12px"><dt>Firmware</dt><dd id="fw">–</dd><dt>Role</dt><dd id="role">–</dd><dt>Placement daemon role</dt><dd id="rrole">–</dd><dt>Wired backhaul</dt><dd id="eth">–</dd><dt>Backhaul RSSI (median)</dt><dd id="bhr">–</dd></dl></section>
+<section class="card c6"><h2>5 GHz backhaul link</h2><div id="bh5"></div></section>
+<section class="card c6"><h2>2.4 GHz backhaul link</h2><div id="bh24"></div></section>
+<section class="card c8"><h2>Backhaul signal (dBm)</h2><canvas id="chart"></canvas><div class="explain" style="font-size:12px">Blue = 5 GHz, orange = 2.4 GHz. Dashed lines: −65 dBm (good), −75 dBm (weak).</div></section>
+<section class="card c4"><h2>Event timeline</h2><div class="events" id="events"></div></section>
+<section class="card"><h2>Details</h2><div class="tabs" id="tabs"></div><pre id="detail"></pre></section>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const STATES={
+ NotAssociated:["Not connected to the router","The satellite has no backhaul link. Press Sync on the router, then on this unit, or check it is in range.","fail-ish"],
+ AutoConfigInProgress:["Pairing with the router","WPS pairing is running to fetch the router's backhaul name and key.","busy"],
+ AutoConfigFinish:["Pairing finished","Backhaul credentials received; joining the router's backhaul network.","busy"],
+ AutoConfigFail:["Pairing failed","WPS/auto-config did not complete. Retry Sync on both units.","bad"],
+ Measuring:["Connected – measuring the link","Linked to the router; measuring signal and speed to judge placement.","busy"],
+ WPSTimeout:["Pairing timed out","No router answered the WPS request within the Sync window.","bad"],
+ BSSIDAssocTimeout:["Could not join the router's backhaul","Credentials are known but association to the router's BSSID timed out.","bad"],
+ AssocTimeout:["Could not join the backhaul","Association attempts timed out.","bad"],
+ IPLeaseFail:["Connected, but no IP address","The link is up but DHCP from the router failed.","bad"],
+ RE_MoveCloser:["In mesh – link is weak","Connected, but the backhaul is weak. Moving closer to the router should help (amber LED).","warn"],
+ RE_MoveFarther:["In mesh – could move farther","Connected with a very strong link; it could be placed farther away.","ok"],
+ RE_LocationSuitable:["In mesh – good link","Connected to the router with a good backhaul. Placement is fine (blue LED).","ok"],
+ CL_LinkSufficient:["Client link sufficient","Operating as a client with an adequate link.","ok"],
+ CL_LinkInadequate:["Client link inadequate","Operating as a client but the link is poor.","warn"],
+ CL_ActingAsRE:["Switching to satellite role","The link is good enough to act as a range extender; restarting in that role.","busy"],
+ InCAPMode:["Wired to the router","This unit has a wired backhaul and is acting as part of the main network.","ok"]
+};
+const STAGES=[["Waiting","Powered on, no link"],["Pairing","WPS / searching"],["Connected","Backhaul link up"],["Settings synced","Router config applied"],["In mesh","Placement judged"]];
+const ACTIVE=/SCANNING|ASSOCIATING|ASSOCIATED|AUTHENTICATING|4WAY_HANDSHAKE|GROUP_HANDSHAKE/;
+let paused=false,data=null,tab="events",fails=0;
+$("pause").onclick=()=>{paused=!paused;$("pause").textContent=paused?"Resume":"Pause"};
+function stageOf(d){
+ const r=d.repacd||"",s5=d.bh_5g.state||"",s24=d.bh_24g.state||"";
+ const linked=s5==="COMPLETED"||s24==="COMPLETED"||d.eth_backhaul==="1";
+ if(/RE_|CL_|InCAPMode/.test(r)) return [4,false];
+ if(r==="Measuring") return [3,false];
+ if(/Fail|Timeout/.test(r)) return [linked?2:1,true];
+ if(linked) return [r==="AutoConfigFinish"?3:2,false];
+ if(r==="AutoConfigInProgress"||ACTIVE.test(s5)||ACTIVE.test(s24)) return [1,false];
+ return [0,false];
+}
+function link(b){
+ if(!b) return "";
+ const up=b.state==="COMPLETED",rssi=b.rssi;
+ const pct=rssi==null?0:Math.max(0,Math.min(100,(rssi+95)*100/60));
+ const col=rssi==null?"var(--line)":rssi>=-65?"var(--ok)":rssi>=-75?"var(--warn)":"var(--bad)";
+ return `<dl class="kv"><dt>State</dt><dd>${esc(b.state||"–")} ${up?"(connected)":""}</dd><dt>Interface</dt><dd>${esc(b.iface)}</dd>
+ <dt>Router BSSID</dt><dd>${esc(b.bssid||"–")}</dd><dt>Backhaul SSID</dt><dd>${esc(b.ssid||"–")}</dd>
+ <dt>Signal</dt><dd>${rssi==null?"–":rssi+" dBm"}</dd><dt>Link rate</dt><dd>${esc(b.rate||"–")}</dd><dt>Frequency</dt><dd>${b.freq?esc(b.freq)+" GHz":"–"}</dd></dl>
+ <div class="bar"><i style="width:${pct}%;background:${col}"></i></div>`;
+}
+function chart(hist){
+ const c=$("chart"),dpr=window.devicePixelRatio||1,w=c.clientWidth,h=c.clientHeight;
+ c.width=w*dpr;c.height=h*dpr;const g=c.getContext("2d");g.scale(dpr,dpr);g.clearRect(0,0,w,h);
+ const css=getComputedStyle(document.documentElement),mute=css.getPropertyValue("--mute"),line=css.getPropertyValue("--line");
+ const pts=hist.trim().split("\n").filter(Boolean).map(l=>l.split(",")).map(a=>[+a[0],a[1]==="null"?null:+a[1],a[2]==="null"?null:+a[2]]);
+ const lo=-95,hi=-30,y=v=>h-18-(v-lo)/(hi-lo)*(h-28),L=36;
+ g.font="11px system-ui";g.fillStyle=mute;g.strokeStyle=line;
+ for(const v of [-90,-75,-65,-50,-35]){g.beginPath();g.setLineDash(v===-65||v===-75?[4,4]:[]);g.moveTo(L,y(v));g.lineTo(w,y(v));g.stroke();g.fillText(v,4,y(v)+4)}
+ g.setLineDash([]);if(pts.length<2) return;
+ const t0=pts[0][0],t1=pts[pts.length-1][0]||t0+1,x=t=>L+(t-t0)/Math.max(1,t1-t0)*(w-L-4);
+ [[1,"#2a7de1"],[2,"#e8892b"]].forEach(([i,col])=>{g.strokeStyle=col;g.lineWidth=2;g.beginPath();let on=false;
+  for(const p of pts){if(p[i]==null){on=false;continue}on?g.lineTo(x(p[0]),y(p[i])):g.moveTo(x(p[0]),y(p[i]));on=true}g.stroke()});
+ g.fillStyle=mute;g.fillText(Math.round((t1-t0)/60)+" min shown",w-90,h-4);
+}
+const TABS={events:"Event timeline (all)",log_repacd:"Placement (repacd) log",log_wsplcd:"Settings sync (wsplcd) log",log_wifi:"Wi-Fi / hyd log",hyd:"Mesh topology (hyd)",apsta:"Satellites linked to this unit"};
+$("tabs").innerHTML=Object.entries(TABS).map(([k,v])=>`<button data-k="${k}">${v}</button>`).join("");
+$("tabs").onclick=e=>{const k=e.target.dataset.k;if(k){tab=k;render()}};
+function fmtT(t){const d=new Date(t*1000);return d.toTimeString().slice(0,8)}
+function render(){
+ const d=data;if(!d) return;
+ $("unit").textContent=`${d.fw||""} · ${d.role||""} · up ${Math.floor(d.uptime/3600)}h ${Math.floor(d.uptime%3600/60)}m`;
+ const [st,failed]=stageOf(d);
+ $("stages").innerHTML=STAGES.map((s,i)=>`<div class="stage ${i<st?"done":i===st?(failed?"fail":"now"):""}"><b>${s[0]}</b><span>${s[1]}</span></div>`).join("");
+ const info=STATES[d.repacd]||[d.repacd?d.repacd:"Placement daemon has not reported yet","repacd writes its state once its loop runs, usually within a minute of boot.",""];
+ $("verdict").textContent=info[0];$("explain").textContent=info[1];
+ $("led").textContent=d.led?`LED state reported by firmware: ${d.led}`:"";
+ $("daemons").innerHTML=Object.entries(d.daemons).map(([k,v])=>`<span class="pill ${v?"up":"down"}">${k} ${v?"running":"stopped"}</span>`).join("");
+ $("fw").textContent=d.fw||"–";$("role").textContent=d.role||"–";$("rrole").textContent=d.repacd_role||"–";
+ $("eth").textContent=d.eth_backhaul==="1"?"yes":"no";$("bhr").textContent=d.bh_rssi_median||"–";
+ $("bh5").innerHTML=link(d.bh_5g);$("bh24").innerHTML=link(d.bh_24g);
+ chart(d.rssi_hist||"");
+ const ev=(d.events||"").trim().split("\n").filter(Boolean).reverse().map(l=>{const [t,s,...m]=l.split("|");return `<div class="ev"><span class="t">${fmtT(+t)}</span><span class="s">${esc(s)}</span><span>${esc(m.join("|"))}</span></div>`});
+ $("events").innerHTML=ev.join("")||"<div class=explain>No events yet.</div>";
+ document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.k===tab));
+ $("detail").textContent=(tab==="events"?(d.events||"").trim().split("\n").reverse().map(l=>{const [t,s,...m]=l.split("|");return fmtT(+t)+"  "+s.padEnd(8)+" "+m.join("|")}).join("\n"):(d[tab]||"").trim())||"(nothing yet)";
+}
+async function poll(){
+ if(!paused){try{const r=await fetch("api.cgi",{cache:"no-store"});if(!r.ok) throw new Error(r.status);data=await r.json();fails=0;
+  $("dot").className="dot on";$("livetxt").textContent="live · "+new Date().toTimeString().slice(0,8);render()}
+ catch(e){fails++;$("dot").className="dot off";$("livetxt").textContent=fails>2?"unit not responding (rebooting or IP changed?)":"retrying…"}}
+ setTimeout(poll,2000);
+}
+window.addEventListener("resize",()=>data&&chart(data.rssi_hist||""));
+poll();
+</script>
+</body>
+</html>

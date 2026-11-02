@@ -1,0 +1,16 @@
+#!/bin/sh /etc/rc.common
+# Live mesh sync monitor on http://<this unit>:8080/
+
+START=99
+STOP=10
+
+start() {
+	[ -d /var/log/lighttpd ] || mkdir -p /var/log/lighttpd
+	mkdir -p /tmp/syncmon
+	start-stop-daemon -S -b -m -p /var/run/syncmon-watch.pid -x /usr/sbin/syncmon-watch
+}
+
+stop() {
+	start-stop-daemon -K -p /var/run/syncmon-watch.pid 2>/dev/null
+	kill $(cat /var/run/lighttpd-syncmon.pid 2>/dev/null) 2>/dev/null
+}

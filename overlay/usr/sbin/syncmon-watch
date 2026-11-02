@@ -1,0 +1,134 @@
+#!/bin/sh
+# Live mesh sync monitor: collects backhaul/mesh state every 2s into /tmp/syncmon
+# and records every change as a timestamped event. Served by /www.syncmon on :8080.
+
+D=/tmp/syncmon
+CONFIG=/bin/config
+mkdir -p $D /var/run /var/log/lighttpd
+touch $D/events $D/rssi
+
+bh5=$($CONFIG get wl5g_BACKHAUL_STA)
+bh24=$($CONFIG get wl2g_BACKHAUL_STA)
+ap5=$($CONFIG get wl5g_BACKHAUL_AP)
+ap24=$($CONFIG get wl2g_BACKHAUL_AP)
+[ -n "$bh5" ] || bh5=ath11
+[ -n "$bh24" ] || bh24=ath02
+
+# JSON string from stdin; strips control chars and hides secrets.
+jstr() {
+	sed -e 's/\r//g' -e 's/\t/  /g' \
+	    -e 's/\(psk\|passphrase\|password\|passwd\|wpa_key\|key\)\([=: ]\+\)[^ ,;]*/\1\2***/Ig' \
+	    -e 's/\\/\\\\/g' -e 's/"/\\"/g' -e 's/[[:cntrl:]]//g' |
+	awk 'BEGIN{printf "\""} NR>1{printf "\\n"} {printf "%s", $0} END{printf "\""}'
+}
+
+event() {
+	echo "$(date +%s)|$1|$2" >> $D/events
+	if [ $(wc -l < $D/events) -gt 400 ]; then
+		tail -n 300 $D/events > $D/events.tmp && mv $D/events.tmp $D/events
+	fi
+}
+
+# iface -> "wpa_state|bssid|ssid|rssi|rate|freq"
+sta_info() {
+	local ifc=$1 st bssid ssid iw rssi rate freq
+	st=$(timeout 2 wpa_cli -p /var/run/wpa_supplicant-$ifc -i $ifc status 2>/dev/null)
+	bssid=$(echo "$st" | sed -n 's/^bssid=//p')
+	ssid=$(echo "$st" | sed -n 's/^ssid=//p')
+	iw=$(iwconfig $ifc 2>/dev/null)
+	rssi=$(echo "$iw" | sed -n 's/.*Signal level[=:]\(-\{0,1\}[0-9]*\).*/\1/p')
+	rate=$(echo "$iw" | sed -n 's/.*Bit Rate[=:]\([0-9.]*\) *\([GMk]b\/s\).*/\1 \2/p')
+	freq=$(echo "$iw" | sed -n 's/.*Frequency[=:]\([0-9.]*\) *GHz.*/\1/p')
+	[ -n "$st" ] || st="wpa_state=NO_SUPPLICANT"
+	echo "$(echo "$st" | sed -n 's/^wpa_state=//p')|$bssid|$ssid|$rssi|$rate|$freq"
+}
+
+pidof_q() { pidof "$1" >/dev/null 2>&1 && echo 1 || echo 0; }
+rs() { [ "$1" = 1 ] && echo running || echo stopped; }
+
+ensure_httpd() {
+	local p
+	p=$(cat /var/run/lighttpd-syncmon.pid 2>/dev/null)
+	if [ -z "$p" ] || [ ! -d /proc/$p ]; then
+		/usr/sbin/lighttpd -f /etc/lighttpd/lighttpd_syncmon.conf
+	fi
+}
+
+last=""
+n=0
+event monitor "Sync monitor started"
+while true; do
+	ensure_httpd
+	now=$(date +%s)
+	up=$(cut -d. -f1 /proc/uptime)
+	repacd=$(cat /tmp/syncmon_repacd_state 2>/dev/null)
+	led=$(cat /tmp/led_state 2>/dev/null)
+	role=$(cat /tmp/orbi_type 2>/dev/null)
+	eth=$(cat /tmp/link_status_eth 2>/dev/null)
+	bhr=$(cat /tmp/backhaul_rssi 2>/dev/null)
+	i5=$(sta_info $bh5)
+	i24=$(sta_info $bh24)
+	d_hyd=$(pidof_q hyd); d_wsp=$(pidof_q wsplcd); d_rep=$(pidof_q repacd-run.sh)
+	[ "$d_rep" = 1 ] || d_rep=$(ps w | grep -q '[r]epacd-run' && echo 1 || echo 0)
+	d_hap=$(pidof_q hostapd); d_wpa=$(pidof_q wpa_supplicant); d_lbd=$(pidof_q lbd)
+
+	# Events on every change.
+	cur="repacd=$repacd;led=$led;5g=${i5%%|*};24g=${i24%%|*};eth=$eth;hyd=$(rs $d_hyd);wsplcd=$(rs $d_wsp);lbd=$(rs $d_lbd);hostapd=$(rs $d_hap)"
+	if [ "$cur" != "$last" ]; then
+		o="$last"
+		for kv in $(echo "$cur" | tr ';' ' '); do
+			k=${kv%%=*}; v=${kv#*=}
+			ov=$(echo "$o" | tr ';' '\n' | sed -n "s/^$k=//p")
+			{ [ -z "$o" ] && [ -n "$v" ]; } || { [ -n "$o" ] && [ "$v" != "$ov" ]; } && event "$k" "${ov:-?} -> ${v:-?}"
+		done
+		last="$cur"
+	fi
+
+	r5=$(echo "$i5" | cut -d'|' -f4); r24=$(echo "$i24" | cut -d'|' -f4)
+	echo "$now,${r5:-null},${r24:-null}" >> $D/rssi
+	if [ $(wc -l < $D/rssi) -gt 200 ]; then
+		tail -n 150 $D/rssi > $D/rssi.tmp && mv $D/rssi.tmp $D/rssi
+	fi
+
+	# Slower, heavier views every ~10s.
+	if [ $((n % 5)) -eq 0 ]; then
+		{ printf 'td s\n'; sleep 1; } | timeout 3 nc 127.0.0.1 7777 > $D/hyd.tmp 2>/dev/null
+		mv $D/hyd.tmp $D/hyd.txt
+		{ for a in $ap5 $ap24; do echo "== $a (backhaul AP: satellites/daisy-chain clients)"; wlanconfig $a list sta 2>/dev/null; done; } > $D/apsta.txt
+	fi
+	n=$((n + 1))
+
+	{
+		printf '{"time":%s,"uptime":%s,' "$now" "$up"
+		printf '"fw":%s,' "$(cat /firmware_version | jstr)"
+		printf '"role":%s,"led":%s,"repacd":%s,"eth_backhaul":%s,"bh_rssi_median":%s,' \
+			"$(echo "$role" | jstr)" "$(echo "$led" | jstr)" "$(echo "$repacd" | jstr)" \
+			"$(echo "$eth" | jstr)" "$(echo "$bhr" | jstr)"
+		printf '"repacd_role":%s,' "$(uci -q get repacd.repacd.Role | jstr)"
+		for b in "5g:$bh5:$i5" "24g:$bh24:$i24"; do
+			band=${b%%:*}; rest=${b#*:}; ifc=${rest%%:*}; info=${rest#*:}
+			IFS='|' read -r st bssid ssid rssi rate freq <<-EOF
+			$info
+			EOF
+			printf '"bh_%s":{"iface":%s,"state":%s,"bssid":%s,"ssid":%s,"rssi":%s,"rate":%s,"freq":%s},' "$band" \
+				"$(echo "$ifc" | jstr)" "$(echo "$st" | jstr)" "$(echo "$bssid" | jstr)" "$(echo "$ssid" | jstr)" \
+				"${rssi:-null}" "$(echo "$rate" | jstr)" "$(echo "$freq" | jstr)"
+		done
+		printf '"daemons":{"hyd":%s,"wsplcd":%s,"repacd":%s,"lbd":%s,"hostapd":%s,"wpa_supplicant":%s},' \
+			"$d_hyd" "$d_wsp" "$d_rep" "$d_lbd" "$d_hap" "$d_wpa"
+		printf '"hyd":%s,' "$(sed 's/^[ >]*//' $D/hyd.txt 2>/dev/null | tail -n 80 | jstr)"
+		printf '"apsta":%s,' "$(cat $D/apsta.txt 2>/dev/null | jstr)"
+		printf '"log_repacd":%s,' "$(logread 2>/dev/null | grep -E 'repacd' | grep -vE 'repacd: (Measuring|RE_[A-Za-z]+|CL_[A-Za-z]+|NotAssociated|AutoConfig[A-Za-z]*)$' | tail -n 60 | jstr)"
+		printf '"log_wsplcd":%s,' "$( { [ -f /tmp/wsplcd.log ] && tail -n 60 /tmp/wsplcd.log; logread 2>/dev/null | grep -iE 'wsplcd|wps|apac' | tail -n 30; } | jstr)"
+		printf '"log_wifi":%s,' "$(logread 2>/dev/null | grep -iE 'hostapd|wpa_supplicant|hyd|lbd|backhaul' | tail -n 60 | jstr)"
+		printf '"events":%s,' "$(tail -n 150 $D/events | jstr)"
+		printf '"rssi_hist":%s}' "$(tail -n 150 $D/rssi | jstr)"
+	} > $D/state.tmp && mv $D/state.tmp $D/state.json
+
+	# Keep the wsplcd debug log bounded (it lives in RAM).
+	if [ -f /tmp/wsplcd.log ] && [ $(wc -c < /tmp/wsplcd.log) -gt 1048576 ]; then
+		tail -n 500 /tmp/wsplcd.log > $D/wsplcd.tmp && cat $D/wsplcd.tmp > /tmp/wsplcd.log && rm -f $D/wsplcd.tmp
+	fi
+
+	sleep 2
+done

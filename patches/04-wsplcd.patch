@@ -1,0 +1,20 @@
+--- a/etc/config/wsplcd
++++ b/etc/config/wsplcd
+@@ -17,7 +17,7 @@
+ 	# WPAPassphraseType LONG or SHORT
+ 	option WPAPassphraseType 'LONG'
+ 	# DebugLevel DUMP,DEBUG,INFO,ERROR
+-	option DebugLevel 'ERROR'
++	option DebugLevel 'INFO'
+ 	option BandSel '0'
+ 	option BandChoice '5G'
+ 	option RMCollectTimeout '10'
+@@ -38,7 +38,7 @@
+ 	option WaitOtherBandsSecs '20'
+ 	option WaitFirstBandSecs  '30'
+ 	# Write debug log to file: NONE, APPEND, TRUNCATE
+-	option WriteDebugLogToFile 'NONE'
++	option WriteDebugLogToFile 'TRUNCATE'
+ 
+ 	# Config push restart and apply timeouts in secs
+ 	# Applicable to Registrar
