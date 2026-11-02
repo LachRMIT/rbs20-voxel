@@ -1,0 +1,11 @@
+--- a/lib/dni_platform/project/dni_project.sh
++++ b/lib/dni_platform/project/dni_project.sh
+@@ -590,7 +590,7 @@
+ 	dni_artmtd_mtd_detect
+ 	dni_language_mtd_detect
+ 
+-	/sbin/artmtd -r board_model_id | cut -f 2 -d ":" > /tmp/board_model_id
++	echo "RBS20" | cut -f 2 -d ":" > /tmp/board_model_id
+ 	model_name=`cat /tmp/board_model_id`
+ 
+ 	#check bootcmd partition, if dirty, erase it and reboot
