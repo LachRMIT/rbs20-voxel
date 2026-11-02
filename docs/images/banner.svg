@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="220" viewBox="0 0 900 220" role="img" aria-label="RBS20 Voxel">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0f172a"/><stop offset="1" stop-color="#1e293b"/>
+    </linearGradient>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ff2d55"/><stop offset=".25" stop-color="#ffcc00"/>
+      <stop offset=".5" stop-color="#34c759"/><stop offset=".75" stop-color="#0a84ff"/><stop offset="1" stop-color="#af52de"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="220" rx="18" fill="url(#bg)"/>
+  <g transform="translate(60 40) scale(1.4)">
+    <polygon points="50,3 93,27 93,73 50,97 7,73 7,27" fill="url(#g)"/>
+    <polygon points="50,22 76,36 50,50 24,36" fill="#e5e7eb"/>
+    <polygon points="24,36 50,50 50,80 24,66" fill="#9ca3af"/>
+    <polygon points="76,36 50,50 50,80 76,66" fill="#cbd5e1"/>
+  </g>
+  <text x="230" y="105" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="54" font-weight="700" fill="#f8fafc">RBS20 Voxel</text>
+  <text x="232" y="148" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="21" fill="#94a3b8">Custom mesh firmware for the NETGEAR Orbi RBS20 satellite</text>
+  <g font-family="ui-monospace, Menlo, Consolas, monospace" font-size="15" fill="#34c759">
+    <text x="232" y="184">IPQ4019 · Linux 3.14.77 · OpenWrt QSDK · Qualcomm SON mesh</text>
+  </g>
+</svg>
