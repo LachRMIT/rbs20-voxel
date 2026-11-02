@@ -1,0 +1,30 @@
+#!/bin/sh /etc/rc.common
+
+START=98
+STOP=30
+
+PATH=/bin:/sbin:/usr/bin:/usr/sbin
+CONFIG=/bin/config
+DROPBEAR="/usr/sbin/dropbear"
+PIDFILE="/var/run/dropbear.pid"
+PORT=22
+
+start() {
+	# Set TimeZone for console
+	tz=$($CONFIG get time_zone)
+	echo "$tz" > /tmp/TZ
+	# Root's SSH password = the web admin password. Stock hashes it with SHA crypt, which this
+	# uClibc libcrypt (MD5/DES only) can't verify, so set it with MD5. If the plain password
+	# isn't stored, use "password" so there is always a known login.
+	pw=$($CONFIG get http_passwd)
+	[ -n "$pw" ] || pw=password
+	printf '%s\n%s\n' "$pw" "$pw" | passwd -a md5 root >/dev/null 2>&1
+
+	# Start SSH server; host keys are generated on first connection (-R)
+	$DROPBEAR -p $PORT -a -R -P $PIDFILE
+}
+
+stop() {
+	# Stop SSH server
+	kill `cat $PIDFILE`
+}

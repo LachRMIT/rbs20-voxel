@@ -1,0 +1,32 @@
+--- a/usr/sbin/user-manager.sh
++++ b/usr/sbin/user-manager.sh
+@@ -179,7 +179,7 @@
+     local _user="$1"
+     local _pass="$2"
+ 
+-    passwd -s -a sha "$_user" <<-EOF
++    passwd -s -a md5 "$_user" <<-EOF
+ 	$_pass
+ 	$_pass
+ 	EOF
+@@ -207,7 +207,7 @@
+     local _home="$5"
+     local _shell="$6"
+ 
+-    adduser -H -D -a sha -u "$_uid" -G "$_group" -h "$_home" -s "$_shell" "$_user"
++    adduser -H -D -a md5 -u "$_uid" -G "$_group" -h "$_home" -s "$_shell" "$_user"
+     local _ret=$?
+ 
+     if [ $_ret -ne 0 ]; then
+@@ -376,9 +376,9 @@
+     fi
+ 
+     http_username="$(get_http_username)"
+-    http_password="$(get_http_hashed_password)"
++    http_password="$(get_http_password)"
+     if [ -z "$http_password" ]; then
+-        http_password="$(get_http_password)"
++        http_password="$(get_http_hashed_password)"
+     fi
+ 
+     reset_origin_user_group
