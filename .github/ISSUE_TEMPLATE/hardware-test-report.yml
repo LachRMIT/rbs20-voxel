@@ -1,0 +1,46 @@
+name: Hardware test report
+description: Report the result of flashing a build on a real unit
+title: "[Test] <unit> <build>"
+labels: ["hardware-test"]
+body:
+  - type: markdown
+    attributes:
+      value: "Thanks for testing. Please mask Wi-Fi keys, SSIDs, MAC addresses and public IPs in anything you paste."
+  - type: dropdown
+    id: unit
+    attributes:
+      label: Unit flashed
+      options: ["Real RBS20", "RBR20 used as a satellite", "Other"]
+    validations: { required: true }
+  - type: input
+    id: build
+    attributes:
+      label: Build and image variant
+      placeholder: "9.2.7.6.6SF-P8, RBS20-V9.2.7.6.6SF-P8.img"
+    validations: { required: true }
+  - type: input
+    id: router
+    attributes:
+      label: Router and firmware
+      placeholder: "RBR50v2 on Voxel 9.2.5.2.x"
+  - type: checkboxes
+    id: results
+    attributes:
+      label: What worked
+      options:
+        - label: Booted as a satellite (firmware version shows the custom build)
+        - label: SSH login as root
+        - label: Synced to the router
+        - label: Sync monitor on port 8080 loads
+        - label: Router UI shows Config Sync complete
+  - type: textarea
+    id: backhaul
+    attributes:
+      label: Backhaul links
+      description: Signal and rate for 5 GHz and 2.4 GHz from the sync monitor, if available.
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes and logs
+      description: Anything unexpected. Mask personal details.
+      render: text
