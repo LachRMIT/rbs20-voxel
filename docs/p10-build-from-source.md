@@ -50,3 +50,7 @@ fakeroot python3 scripts/build_p10.py \
 Ports 22, 8080 and 9100 are dropped on every interface except the LAN bridge `br0` (`/usr/sbin/rbs20-guard` re-applies the rules every 30 seconds).
 
 Removed because a satellite never uses them (stock RBS20 doesn't ship them either): the router web UI (`/www`, 24 MB), Armor and Circle.
+
+## P11
+
+P11 adds a new dashboard on port 8080. See [p11-dashboard.md](p11-dashboard.md).

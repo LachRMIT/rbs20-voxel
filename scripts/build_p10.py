@@ -13,6 +13,8 @@ Steps: unpack the GPL rootfs -> remove router-only parts (manifest/p10-remove.tx
 closed files -> add Voxel mesh files -> apply patches/ -> copy overlay/ then overlay-p10/ ->
 boot links -> check every ELF's libraries resolve -> mksquashfs -> pack the image variants.
 
+P11 (new dashboard on :8080): add --overlay overlay-p11 --version 9.2.7.3.22SF-P11.
+
 Run as root or under fakeroot. Needs: unsquashfs, mksquashfs (xz), patch, readelf, python3.
   fakeroot python3 scripts/build_p10.py --gpl RBS20-V2.7.3.22.img --stock RBS20-V2.7.6.6.img \\
       --donor RBR50_to_RBS50-V9.2.5.2.39SF-HW.img -o out/
@@ -155,6 +157,9 @@ def main():
     ap.add_argument('--readelf', default='readelf')
     ap.add_argument('-o', '--out', default='out')
     ap.add_argument('--skip-stock-check', action='store_true')
+    ap.add_argument('--overlay', action='append', default=[], metavar='DIR',
+                    help='extra overlay copied after overlay-p10/ (repeatable), e.g. overlay-p11 for the P11 dashboard')
+    ap.add_argument('--keep-root', metavar='DIR', help='also copy the finished root filesystem here (for testing)')
     a = ap.parse_args()
     tools = {'unsquashfs': a.unsquashfs}
 
@@ -186,6 +191,8 @@ def main():
     # 4. Our files: sync monitor (overlay/), then P10 changes on top (overlay-p10/)
     copy_tree(os.path.join(REPO, 'overlay'), root)
     copy_tree(os.path.join(REPO, 'overlay-p10'), root)
+    for extra in a.overlay:
+        copy_tree(extra if os.path.isabs(extra) else os.path.join(REPO, extra), root)
 
     # 5. Boot links. dropbear owns port 22, so NETGEAR's sshenable listener stays off.
     rcd = os.path.join(root, 'etc/rc.d')
@@ -203,6 +210,8 @@ def main():
     if bad:
         sys.exit('unresolved libraries:\n  ' + '\n  '.join(bad))
     print('library check: OK')
+    if a.keep_root:
+        run('cp', '-a', root + '/.', a.keep_root)
 
     # 7. Rootfs + images (kernel partition comes from the GPL-built image)
     import orbipack

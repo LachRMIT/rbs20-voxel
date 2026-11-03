@@ -14,6 +14,10 @@ ap24=$($CONFIG get wl2g_BACKHAUL_AP)
 [ -n "$bh5" ] || bh5=ath11
 [ -n "$bh24" ] || bh24=ath02
 
+# BusyBox 1.24 (P10+) wants "timeout -t SECS"; newer BusyBox and coreutils take "timeout SECS".
+if timeout -t 1 true 2>/dev/null; then to() { local s=$1; shift; timeout -t "$s" "$@"; }
+else to() { timeout "$@"; }; fi
+
 # JSON string from stdin; strips control chars and hides secrets.
 jstr() {
 	sed -e 's/\r//g' -e 's/\t/  /g' \
@@ -32,7 +36,7 @@ event() {
 # iface -> "wpa_state|bssid|ssid|rssi|rate|freq"
 sta_info() {
 	local ifc=$1 st bssid ssid iw rssi rate freq
-	st=$(timeout 2 wpa_cli -p /var/run/wpa_supplicant-$ifc -i $ifc status 2>/dev/null)
+	st=$(to 2 wpa_cli -p /var/run/wpa_supplicant-$ifc -i $ifc status 2>/dev/null)
 	bssid=$(echo "$st" | sed -n 's/^bssid=//p')
 	ssid=$(echo "$st" | sed -n 's/^ssid=//p')
 	iw=$(iwconfig $ifc 2>/dev/null)
@@ -92,7 +96,7 @@ while true; do
 
 	# Slower, heavier views every ~10s.
 	if [ $((n % 5)) -eq 0 ]; then
-		{ printf 'td s\n'; sleep 1; } | timeout 3 nc 127.0.0.1 7777 > $D/hyd.tmp 2>/dev/null
+		{ printf 'td s\n'; sleep 1; } | to 3 nc 127.0.0.1 7777 > $D/hyd.tmp 2>/dev/null
 		mv $D/hyd.tmp $D/hyd.txt
 		{ for a in $ap5 $ap24; do echo "== $a (backhaul AP: satellites/daisy-chain clients)"; wlanconfig $a list sta 2>/dev/null; done; } > $D/apsta.txt
 	fi

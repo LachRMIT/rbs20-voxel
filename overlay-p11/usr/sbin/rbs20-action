@@ -1,0 +1,66 @@
+#!/bin/sh
+# P11 dashboard tools. Started in the background by /www.syncmon/action.cgi.
+# Writes "time|name|state|message" to /tmp/syncmon/action, which the page reads.
+#   rbs20-action speedtest | resync | wifi | reboot
+
+D=/tmp/syncmon
+LOCK=$D/action.lock
+mkdir -p $D
+
+say() { echo "$(date +%s)|$1|$2|$3" > $D/action.tmp && mv $D/action.tmp $D/action; }
+
+mkdir $LOCK 2>/dev/null || exit 1
+trap 'rmdir $LOCK' EXIT
+
+if timeout -t 1 true 2>/dev/null; then to() { local s=$1; shift; timeout -t "$s" "$@"; }
+else to() { timeout "$@"; }; fi
+
+gateway() { ip route 2>/dev/null | awk '/^default/ {print $3; exit}'; }
+
+# iperf3 "receiver" summary line -> Mb/s
+mbps() { awk '/receiver/ { for (i = 1; i < NF; i++) if ($(i+1) == "Mbits/sec") v = $i } END { if (v != "") print v }'; }
+
+case "$1" in
+speedtest)
+	gw=$(gateway)
+	[ -n "$gw" ] || { say speedtest failed "No route to the router."; exit 0; }
+	say speedtest running "Measuring to $gw for 5 seconds each way"
+	down=$(to 15 iperf3 -c "$gw" -t 5 -R -f m 2>&1)
+	if echo "$down" | grep -qiE 'refused|unable to connect|no route'; then
+		say speedtest failed "The router isn't running an iperf3 server. Start one on the router with: iperf3 -s -D"
+		exit 0
+	fi
+	up=$(to 15 iperf3 -c "$gw" -t 5 -f m 2>&1)
+	d=$(echo "$down" | mbps); u=$(echo "$up" | mbps)
+	if [ -n "$d$u" ]; then
+		say speedtest done "To the router: ${d:-?} Mb/s down, ${u:-?} Mb/s up"
+		logger -t rbs20-dashboard "speed test to $gw: ${d:-?} down, ${u:-?} up (Mb/s)"
+	else
+		say speedtest failed "iperf3 gave no result: $(echo "$down" | tail -n 1)"
+	fi
+	;;
+resync)
+	say resync running "Restarting the placement and sync daemon (repacd)"
+	logger -t rbs20-dashboard "re-running mesh sync (repacd restart)"
+	/etc/init.d/repacd restart >/dev/null 2>&1
+	say resync done "repacd restarted. Watch the sync steps above."
+	;;
+wifi)
+	say wifi running "Restarting Wi-Fi. Devices will drop for about a minute."
+	logger -t rbs20-dashboard "restarting Wi-Fi"
+	wlan updateconf >/dev/null 2>&1
+	wlan down >/dev/null 2>&1
+	wlan up >/dev/null 2>&1
+	say wifi done "Wi-Fi restarted."
+	;;
+reboot)
+	say reboot running "Rebooting. The page reconnects when the unit is back (about 3 minutes)."
+	logger -t rbs20-dashboard "reboot from the dashboard"
+	sleep 2
+	reboot
+	;;
+*)
+	echo "usage: $0 speedtest|resync|wifi|reboot" >&2
+	exit 2
+	;;
+esac

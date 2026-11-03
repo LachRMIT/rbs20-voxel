@@ -103,3 +103,18 @@ def test_p10_has_no_fallback_password():
     for rel in (('overlay-p10', 'etc', 'init.d', 'dropbear'), ('overlay-p10', 'usr', 'share', 'syncmon', 'auth.sh')):
         text = read(*rel)
         assert 'pw=password' not in text and '= password ]' not in text, rel
+
+
+def test_p11_actions_need_post_and_header():
+    text = read('overlay-p11', 'www.syncmon', 'action.cgi')
+    assert 'REQUEST_METHOD" != POST' in text and 'HTTP_X_RBS20" != 1' in text
+    assert 'syncmon_auth' in text.split('REQUEST_METHOD')[0], 'login check must come first'
+    for name in ('sys.cgi', 'action.cgi'):
+        assert read('overlay-p11', 'www.syncmon', name).startswith('. /usr/share/syncmon/auth.sh\nsyncmon_auth\n'), name
+
+
+def test_busybox_timeout_is_portable():
+    for rel in (('overlay', 'usr', 'sbin', 'syncmon-watch'), ('overlay-p11', 'usr', 'sbin', 'rbs20-action')):
+        text = read(*rel)
+        assert 'timeout -t 1 true' in text, rel
+        assert not any(l.lstrip().startswith(('timeout ', 'st=$(timeout')) or '$(timeout ' in l for l in text.splitlines()), rel
