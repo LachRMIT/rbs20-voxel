@@ -1,0 +1,31 @@
+#!/bin/sh /etc/rc.common
+# SSH (dropbear, compiled from source in P10).
+# Root's password is the web admin password. If the unit only stores the hashed admin
+# password, root stays locked until the first login to the dashboard on :8080, which sets
+# it from the password you type there. There is no default or fallback password.
+# Port 22 is only reachable from the LAN bridge (see /usr/sbin/rbs20-guard).
+
+START=98
+STOP=30
+
+PATH=/bin:/sbin:/usr/bin:/usr/sbin
+CONFIG=/bin/config
+DROPBEAR=/usr/sbin/dropbear
+PIDFILE=/var/run/dropbear.pid
+
+start() {
+	tz=$($CONFIG get time_zone)
+	echo "$tz" > /tmp/TZ
+	pw=$($CONFIG get http_passwd)
+	if [ -n "$pw" ]; then
+		printf '%s\n%s\n' "$pw" "$pw" | passwd -a md5 root >/dev/null 2>&1
+		printf '%s' "$pw" | md5sum | cut -d' ' -f1 > /tmp/.rootpw_synced
+	fi
+	mkdir -p /etc/dropbear
+	# -R: generate a unique host key per unit on first connection
+	$DROPBEAR -p 22 -R -P $PIDFILE
+}
+
+stop() {
+	kill $(cat $PIDFILE 2>/dev/null) 2>/dev/null
+}

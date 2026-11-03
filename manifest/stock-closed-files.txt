@@ -1,0 +1,714 @@
+# Closed/binary-only files taken from stock NETGEAR RBS20 2.7.6.6 (not in NETGEAR's GPL source):
+# Qualcomm Wi-Fi driver + firmware, SON configs/scripts, and other prebuilt NETGEAR binaries.
+# F <path> <md5> <mode> | L <path> <target> | D <path>
+L bin/arch busybox
+L bin/link busybox
+L bin/linux32 busybox
+L bin/linux64 busybox
+L bin/nuke busybox
+L bin/resume busybox
+L bin/setpriv busybox
+F bin/ssh_login 1dab444e67f92ff3cdd0099779d78a86 755
+F etc/RASwitch.sh 28271dead2cc4bf150009078ad23efc8 775
+D etc/bst
+F etc/config/acd a8493458515f32ed9e1b88f49e739365 644
+F etc/config/hyd 9a882e2f27389b6574b58b49d0205a8d 644
+F etc/config/lbd cbd2464ccbf48e5b3b2fe0c52de9377d 644
+F etc/config/repacd 5abca3b86dfaa86e116ec12efef90c80 644
+F etc/config/ssid-steering 45e22339a58713d6b3297bd294bd2fac 644
+F etc/config/wsplcd 83082e515565432a9b3f7f301105e8ff 644
+D etc/d2
+F etc/d2/RGenieCfg.000.json 75e591b471e61460918af34f69e7e62d 664
+F etc/d2/UpCfg.000.json 1f99cac25cabb3c3fd6151831324726e 664
+F etc/d2/XagentCfg.000.json 414d1bb18a432e7b06ec8388c8a851f2 664
+D etc/dil
+F etc/dil/file1.txt fa1479fa26f55896043f3ea8a66097da 755
+F etc/dil/file2.txt 9586ff685ec3dbd8a439aeeeaf9bc02a 755
+F etc/environment 12929713c1d0db85c1f7db163f475d62 644
+F etc/hotplug.d/button/40-wsplcd e0bf1c91d81e52d3708c046c87b518ee 755
+F etc/hotplug.d/button/53-wps-repacd 762cf3dc7afeb2194245a466dee9a2de 755
+D etc/hotplug.d/edge
+F etc/hotplug.d/net/30-hyd acb4aae6a1990bd291ffd053fc2eccfd 755
+D etc/hotplug.d/switch
+F etc/hotplug.d/switch/10-lp 9853ee813b81f995899af3a42fdf9b7f 755
+F etc/hotplug.d/switch/20-netdet f30a0c7f984f768c284005dee62a64fc 755
+F etc/init.d/RA eac6e58142a692eea51fa2e763ba3303 755
+F etc/init.d/acd 9640fa08ed7f1c4cc7cb474e5fdb8dcc 755
+F etc/init.d/check_nmrp.sh 9a353b7b579563c2ad4500b0fadf0346 775
+F etc/init.d/control_firmware 54d8806b0355d1eaada8ce4f3eb4d2a9 755
+F etc/init.d/create_cronjob.init beb986a4c6e64a3c77f4ae78e687da51 755
+F etc/init.d/d2_countryname.sh dbcd28bf5d8c4db344973bde3dde4092 755
+F etc/init.d/dilboot 3648390586720b0c06a5cd0a037b5abb 755
+F etc/init.d/firmware-ping 6ea8eed34dc7efec735d95e2c35e892c 755
+F etc/init.d/hyd f5c4f3f6ea5ead5bd4d063a7600235be 755
+F etc/init.d/hyfi-bridging e6a218f302a44b4d5c98d1661aff6266 755
+F etc/init.d/lbd 1f80d8419fed7fa6a01cbc6f37f353b3 755
+F etc/init.d/ntgdal 71910189373cffeb6ba58ede4b0a407f 755
+F etc/init.d/qca-hostapd eef7f81da560c67917a643c183899f34 775
+F etc/init.d/qca-wpa-supplicant 35ac4cfc2b6b4c6a9bd61cd09bcedf27 775
+F etc/init.d/qcmbr ab9b93cdad97ac39b4d766d96475da33 755
+F etc/init.d/repacd aa18fed8011e4a3858e72e6ec48b955c 755
+F etc/init.d/ssid_steering 77dba4f84191fa28bc1c64826294dda1 755
+F etc/init.d/wifi-listener c168b40f401275340be816274365fd8b 755
+F etc/init.d/wsplcd b4a4a35ca8dbfff01a923a8046d94612 755
+F etc/modules.d/40-qca-hyfi-bridge_dni f386614824818d6001317fae82bd6e1a 644
+F etc/modules.d/40-qca-hyfi-qdisc_dni b715eae833d30bc556a653858a4420b3 644
+F etc/opkg/keys/12d25e753f3e6144 5d2e7e3b782ddee4be13eb0ac0e7b59e 644
+F etc/pam.conf 87fc76f18e98ee7d3848f6b81b3391e5 664
+D etc/pam.d
+F etc/pam.d/common-account a2caa78a6cbc6dd764ece5bd88945bf8 664
+F etc/pam.d/common-auth b91470f92e03075dc7d622f4ad9961d3 664
+F etc/pam.d/common-password ee34d36fea4f9ad81e7875c70e1bf036 664
+F etc/pam.d/common-session c33c4dce6f66633c67d132b911ffb3d5 664
+F etc/pam.d/common-session-noninteractive c041e522119958db382e1a771305a67a 664
+F etc/pam.d/other fe00b1fd97202af9a59f313cf00f487f 664
+L etc/rc.d/K100UPAgent ../init.d/UPAgent
+L etc/rc.d/K100dil ../init.d/dil
+L etc/rc.d/S15qca-hostapd ../init.d/qca-hostapd
+L etc/rc.d/S15qca-wpa-supplicant ../init.d/qca-wpa-supplicant
+L etc/rc.d/S17d2 ../init.d/d2
+L etc/rc.d/S19dil ../init.d/dil
+L etc/rc.d/S50acd ../init.d/acd
+L etc/rc.d/S52wsplcd ../init.d/wsplcd
+L etc/rc.d/S54hyfi-bridging ../init.d/hyfi-bridging
+L etc/rc.d/S55lbd ../init.d/lbd
+L etc/rc.d/S88remGenie ../init.d/remGenie
+L etc/rc.d/S91CSH ../init.d/CSH
+L etc/rc.d/S92RA ../init.d/RA
+L etc/rc.d/S93UPAgent ../init.d/UPAgent
+L etc/rc.d/S95wifi-listener ../init.d/wifi-listener
+L etc/rc.d/S96ASH ../init.d/ASH
+L etc/rc.d/S96control_firmware ../init.d/control_firmware
+L etc/rc.d/S98repacd ../init.d/repacd
+L etc/rc.d/S99DALH ../init.d/DALH
+L etc/rc.d/S99XAgent ../init.d/XAgent
+L etc/rc.d/S99bst ../init.d/bst
+L etc/rc.d/S99check_nmrp.sh ../init.d/check_nmrp.sh
+L etc/rc.d/S99create_cronjob.init ../init.d/create_cronjob.init
+L etc/rc.d/S99hyd ../init.d/hyd
+L etc/rc.d/S99ntgdal ../init.d/ntgdal
+D etc/router_analytics
+D etc/router_analytics/beta
+D etc/router_analytics/debug
+F etc/scripts/firewall/armor.rule a37acd5e359514e308f2689580e909cd 775
+D etc/security
+F etc/security/access.conf dc21d0fd769d655b311d785670e5c6ae 644
+F etc/security/faillock.conf 164da8ffb87f3074179bc60b71d0b99f 644
+F etc/security/group.conf f1e26e8db6f7abd2d697d7dad3422c36 644
+F etc/security/limits.conf 89c4b52dc8f48983424963640b769025 644
+D etc/security/limits.d
+F etc/security/namespace.conf 6b3796403421d66db7defc46517711bc 644
+D etc/security/namespace.d
+F etc/security/namespace.init d9e6a7c85e966427ef23a04ec6c7000f 755
+F etc/security/pam_env.conf 89cc8702173d5cd51abc152ae9f8d6bc 644
+F etc/security/time.conf 06e05c6079e839c8833ac7c3abfde192 644
+F etc/ssl/certs/AC_RAIZ_FNMT-RCM.crt 9ce4ad36aa54d2a6f55cf5174479ef77 644
+F etc/ssl/certs/Amazon_Root_CA_1.crt 75ab0365341d4dcd8eb6dce2a460b9e3 644
+F etc/ssl/certs/Amazon_Root_CA_2.crt da99aaab610f0bd6d62c03c5a68732a8 644
+F etc/ssl/certs/Amazon_Root_CA_3.crt b896d7107b5b22ed054f91e018274d64 644
+F etc/ssl/certs/Amazon_Root_CA_4.crt 3dde7b0ebe90a0d1fcedf597d99ef647 644
+F etc/ssl/certs/Certigna_Root_CA.crt 340082b92da0dd5e5b86d049a2ec9d7e 644
+F etc/ssl/certs/Certum_Trusted_Network_CA_2.crt 8e19b7a1cf512a7b1ff1e80772d4409b 644
+F etc/ssl/certs/Entrust_Root_Certification_Authority_-_G4.crt d13db3e134cf7e03b2cf94719f03724f 644
+F etc/ssl/certs/GDCA_TrustAUTH_R5_ROOT.crt d617bab34988c4c715a15ec26d3cbfa9 644
+F etc/ssl/certs/GTS_Root_R1.crt 7ff48ca02ab4f09c067b8483a355920f 644
+F etc/ssl/certs/GTS_Root_R2.crt 71a6df09e67551b49eaba94d3a719f50 644
+F etc/ssl/certs/GTS_Root_R3.crt 9bbcc4b3c2aa8957b3a67a9b27c6c88d 644
+F etc/ssl/certs/GTS_Root_R4.crt 3f55d74684bef374773ea32911627ee5 644
+F etc/ssl/certs/GlobalSign_Root_CA_-_R6.crt eaa6b2488c47aa120e68ba48c7020ed9 644
+F etc/ssl/certs/Hellenic_Academic_and_Research_Institutions_ECC_RootCA_2015.crt 7e60c142f9f64b69794ef8a2c6d98b84 644
+F etc/ssl/certs/Hellenic_Academic_and_Research_Institutions_RootCA_2015.crt 24a177ecb7daf5d0e5a3041deb37e66c 644
+F etc/ssl/certs/Hongkong_Post_Root_CA_3.crt 856221c75c8ded8e448f1eda69f4a3e9 644
+F etc/ssl/certs/ISRG_Root_X1.crt 79fa736a7077573785917759a6c69bbc 644
+F etc/ssl/certs/Microsoft_ECC_Root_Certificate_Authority_2017.crt 77e2d1535d138206acba36774ebc24dc 644
+F etc/ssl/certs/Microsoft_RSA_Root_Certificate_Authority_2017.crt cae994582152614482ebab528c4fec95 644
+F etc/ssl/certs/NetLock_Arany_(Class_Gold)_F?tanusitvany.crt e4891503bb0620b6a4d8be9ab9885bc0 644
+F etc/ssl/certs/OISTE_WISeKey_Global_Root_GB_CA.crt cd4d68a2ad33bd9a7a443c6cb710f90b 644
+F etc/ssl/certs/OISTE_WISeKey_Global_Root_GC_CA.crt de5e1b050b3a992af5508bedec8f88a9 644
+F etc/ssl/certs/SSL.com_EV_Root_Certification_Authority_ECC.crt 8491e1e401be00b677dfc1e5d93710e5 644
+F etc/ssl/certs/SSL.com_EV_Root_Certification_Authority_RSA_R2.crt cf38b35587666ba1a188fe221aae56ae 644
+F etc/ssl/certs/SSL.com_Root_Certification_Authority_ECC.crt b8b47578318fadbc7a9e1c932fd7bf78 644
+F etc/ssl/certs/SSL.com_Root_Certification_Authority_RSA.crt b495e68cdf74d51bfad30fdb61551a08 644
+F etc/ssl/certs/SZAFIR_ROOT_CA2.crt 9f22276739f927efe1a4d254ae509657 644
+F etc/ssl/certs/TUBITAK_Kamu_SM_SSL_Kok_Sertifikasi_-_Surum_1.crt c454917c49075633531e8f86bf1784b1 644
+F etc/ssl/certs/TrustCor_ECA-1.crt 9aa6ee1550c5c6ec01d95187154493f4 644
+F etc/ssl/certs/TrustCor_RootCert_CA-1.crt 00f77042d80b2027a597e6e2819e689d 644
+F etc/ssl/certs/TrustCor_RootCert_CA-2.crt 96c416ce8b2d88a11f13e3a48a4ea1bd 644
+F etc/ssl/certs/Trustwave_Global_Certification_Authority.crt 285005ca444d80f9b799ec1f2343ac57 644
+F etc/ssl/certs/Trustwave_Global_ECC_P256_Certification_Authority.crt 8af93edcd80f7d6de289e9f0e85fe9cf 644
+F etc/ssl/certs/Trustwave_Global_ECC_P384_Certification_Authority.crt ca8667f00c3709353fed865f98bdc40a 644
+F etc/ssl/certs/UCA_Extended_Validation_Root.crt 01e14b5851d5219c23ea3d37b41b82f2 644
+F etc/ssl/certs/UCA_Global_G2_Root.crt 5c5eb9a5f4b9e85313eb6b0c69bfd20a 644
+F etc/ssl/certs/certSIGN_Root_CA_G2.crt 5ef897ffe499221168c0391727abb84f 644
+F etc/ssl/certs/e-Szigno_Root_CA_2017.crt d298ff506f3dcbb98f2f34b413ad2230 644
+F etc/ssl/certs/emSign_ECC_Root_CA_-_C3.crt 86b9244a4e9eb51d389505bb629a362d 644
+F etc/ssl/certs/emSign_ECC_Root_CA_-_G3.crt e1e7dca34f6d9a7939e7fce7b8d40c42 644
+F etc/ssl/certs/emSign_Root_CA_-_C1.crt ed2e68ceec319d9d11e475685df1a624 644
+F etc/ssl/certs/emSign_Root_CA_-_G1.crt b52d2127e8ac8f7807d4dd9da065b959 644
+F etc/version.txt dd2dbddbc9393b0e402a9442142ee015 755
+D etc/xagent
+D etc/xagent/bst
+F etc/xagent/bst/bst.dev.env b029b65569444aa887368ad639a73149 664
+F etc/xagent/bst/bst.prod.env ea7f9c81da4350fa31abf6ddf3aa7566 664
+F etc/xagent/bst/bst.qa.env 834f087da34c329bbf3fef97f8e6819a 664
+F etc/xagent/bst/bst.staging.env 1199d5888e247ecd6a2713d7d1900edb 664
+F etc/xagent/bst/switch.sh 271ec63bddd7099f08d7e42bbece037e 775
+D etc/xagent/csh
+F etc/xagent/csh/csh.dev.env e9300ca71f7ac04f7aee53a31f156279 664
+F etc/xagent/csh/csh.prod.env e9300ca71f7ac04f7aee53a31f156279 664
+F etc/xagent/csh/csh.qa.env e9300ca71f7ac04f7aee53a31f156279 664
+F etc/xagent/csh/csh.staging.env e9300ca71f7ac04f7aee53a31f156279 664
+F etc/xagent/csh/switch.sh 57e13b3f89cc84954b57f88822c80db6 775
+D etc/xagent/remGenie
+F etc/xagent/remGenie/remGenie.beta.env 80aac8cad2a8760c3f827057bcbc8010 664
+F etc/xagent/remGenie/remGenie.dev.env 7c55cad2301d7ed248c4597fb2b29735 664
+F etc/xagent/remGenie/remGenie.ftrial.env f578bb1a1ed3147344b570c691df4f30 664
+F etc/xagent/remGenie/remGenie.prod.env 67c9249bbdf9f72facc81525f52c42af 664
+F etc/xagent/remGenie/remGenie.qa.env 80aac8cad2a8760c3f827057bcbc8010 664
+F etc/xagent/remGenie/remGenie.qa2.env 80aac8cad2a8760c3f827057bcbc8010 664
+F etc/xagent/remGenie/remGenie.staging.env 80aac8cad2a8760c3f827057bcbc8010 664
+F etc/xagent/remGenie/switch.sh f3158f558ed470b4175d8f054fee2e89 775
+D etc/xagent/upagent
+F etc/xagent/upagent/switch.sh 920f84070ae9fd3627e599eb2731c940 775
+F etc/xagent/upagent/upagent.beta.env 5319bc3d06eb39fe6566789cd4648297 664
+F etc/xagent/upagent/upagent.dev.env 083bb538ab74f14799fe7f080f60bd3e 664
+F etc/xagent/upagent/upagent.ftrial.env ea7f9c81da4350fa31abf6ddf3aa7566 664
+F etc/xagent/upagent/upagent.prod.env ea7f9c81da4350fa31abf6ddf3aa7566 664
+F etc/xagent/upagent/upagent.qa.env 5319bc3d06eb39fe6566789cd4648297 664
+F etc/xagent/upagent/upagent.qa2.env 5319bc3d06eb39fe6566789cd4648297 664
+F etc/xagent/upagent/upagent.staging.env 2d33b4205bdf99addbb6350b72529990 664
+D etc/xagent/xagent
+F etc/xagent/xagent/switch.sh 4737456d07f6ec78f063cbcb634e35c2 775
+F etc/xagent/xagent/xagent.beta.env b035023cab925d9d35c26845a3e7247d 664
+F etc/xagent/xagent/xagent.dev.env 5c11df0abd319992a66bdca6b2908dde 664
+F etc/xagent/xagent/xagent.ftrial.env b59f75457f3807d6f1f4e1d48b5dec78 664
+F etc/xagent/xagent/xagent.prod.env b59f75457f3807d6f1f4e1d48b5dec78 664
+F etc/xagent/xagent/xagent.qa.env b035023cab925d9d35c26845a3e7247d 664
+F etc/xagent/xagent/xagent.qa2.env b035023cab925d9d35c26845a3e7247d 664
+F etc/xagent/xagent/xagent.staging.env b035023cab925d9d35c26845a3e7247d 664
+F etc/xagent/xcenvsw.sh 91eb5de55b2e350ebdf03f5484c19006 775
+D lib/firmware/IPQ4019
+D lib/firmware/IPQ4019/hw.1
+D lib/firmware/IPQ4019/hw.1/AU
+F lib/firmware/IPQ4019/hw.1/AU/boardData_1_0_IPQ4019_DK04_2G.bin b850c578419c23de297a6ceaf002e855 664
+F lib/firmware/IPQ4019/hw.1/AU/boardData_1_0_IPQ4019_DK04_5G.bin 40e25f99e08192fd2037a09b5becbc4a 664
+F lib/firmware/IPQ4019/hw.1/AU/boarddata_0.bin b850c578419c23de297a6ceaf002e855 664
+F lib/firmware/IPQ4019/hw.1/AU/boarddata_1.bin 3a1a11fb16865f3505f2d8e7741aff19 664
+D lib/firmware/IPQ4019/hw.1/Canada
+F lib/firmware/IPQ4019/hw.1/Canada/boardData_1_0_IPQ4019_DK04_2G.bin cba9a571b8cea884035733a45553bdc0 664
+F lib/firmware/IPQ4019/hw.1/Canada/boardData_1_0_IPQ4019_DK04_5G.bin 3b19696ef3377746bb5e874bb8bd2d86 664
+F lib/firmware/IPQ4019/hw.1/Canada/boarddata_0.bin cba9a571b8cea884035733a45553bdc0 664
+F lib/firmware/IPQ4019/hw.1/Canada/boarddata_1.bin e516a756fa8b09a96b9eea641ea3e724 664
+D lib/firmware/IPQ4019/hw.1/FCC_ETSI
+F lib/firmware/IPQ4019/hw.1/FCC_ETSI/boardData_1_0_IPQ4019_DK04_2G.bin ad1e2924e64ee8c9f8756dd511a161c6 664
+F lib/firmware/IPQ4019/hw.1/FCC_ETSI/boardData_1_0_IPQ4019_DK04_5G.bin db9b2aafa442140e7327020cfa98f09b 664
+F lib/firmware/IPQ4019/hw.1/FCC_ETSI/boarddata_0.bin ad1e2924e64ee8c9f8756dd511a161c6 664
+F lib/firmware/IPQ4019/hw.1/FCC_ETSI/boarddata_1.bin f1aa74a1412603b9c4d1a8fb03846b3c 664
+D lib/firmware/IPQ4019/hw.1/HK
+F lib/firmware/IPQ4019/hw.1/HK/boardData_1_0_IPQ4019_DK04_2G.bin b850c578419c23de297a6ceaf002e855 664
+F lib/firmware/IPQ4019/hw.1/HK/boardData_1_0_IPQ4019_DK04_5G.bin 40e25f99e08192fd2037a09b5becbc4a 664
+F lib/firmware/IPQ4019/hw.1/HK/boarddata_0.bin b850c578419c23de297a6ceaf002e855 664
+F lib/firmware/IPQ4019/hw.1/HK/boarddata_1.bin 3a1a11fb16865f3505f2d8e7741aff19 664
+D lib/firmware/IPQ4019/hw.1/INS
+F lib/firmware/IPQ4019/hw.1/INS/boardData_1_0_IPQ4019_DK04_2G.bin 642efd2170429af0691587a0a79c9b79 664
+F lib/firmware/IPQ4019/hw.1/INS/boardData_1_0_IPQ4019_DK04_5G.bin 5a0a6c3f921ea9d9600fb22d9eb55ad0 664
+F lib/firmware/IPQ4019/hw.1/INS/boarddata_0.bin 642efd2170429af0691587a0a79c9b79 664
+F lib/firmware/IPQ4019/hw.1/INS/boarddata_1.bin eeeb3ed0dcd01164b142e465410003c6 664
+D lib/firmware/IPQ4019/hw.1/Korea
+F lib/firmware/IPQ4019/hw.1/Korea/boardData_1_0_IPQ4019_DK04_2G.bin 332cff3c8c00177883ffd561eaa7aed1 664
+F lib/firmware/IPQ4019/hw.1/Korea/boardData_1_0_IPQ4019_DK04_5G.bin ef30ff3ea62aafbc3147e593d7bd757a 664
+F lib/firmware/IPQ4019/hw.1/Korea/boarddata_0.bin 332cff3c8c00177883ffd561eaa7aed1 664
+F lib/firmware/IPQ4019/hw.1/Korea/boarddata_1.bin 1dca0b57c9c6bc0cb5e40d45bcba4418 664
+D lib/firmware/IPQ4019/hw.1/Mexico
+F lib/firmware/IPQ4019/hw.1/Mexico/boardData_1_0_IPQ4019_DK04_2G.bin b850c578419c23de297a6ceaf002e855 664
+F lib/firmware/IPQ4019/hw.1/Mexico/boardData_1_0_IPQ4019_DK04_5G.bin 40e25f99e08192fd2037a09b5becbc4a 664
+F lib/firmware/IPQ4019/hw.1/Mexico/boarddata_0.bin b850c578419c23de297a6ceaf002e855 664
+F lib/firmware/IPQ4019/hw.1/Mexico/boarddata_1.bin 3a1a11fb16865f3505f2d8e7741aff19 664
+D lib/firmware/IPQ4019/hw.1/SA
+F lib/firmware/IPQ4019/hw.1/SA/boardData_1_0_IPQ4019_DK04_2G.bin 69de89b18cf77d2196198bfd9490249d 664
+F lib/firmware/IPQ4019/hw.1/SA/boardData_1_0_IPQ4019_DK04_5G.bin c63cf48a981f64aaabfafe2142b590f1 664
+F lib/firmware/IPQ4019/hw.1/SA/boarddata_0.bin 69de89b18cf77d2196198bfd9490249d 664
+F lib/firmware/IPQ4019/hw.1/SA/boarddata_1.bin d83bbabe2f8a766b7c40a76bc4e77875 664
+D lib/firmware/IPQ4019/hw.1/SG
+F lib/firmware/IPQ4019/hw.1/SG/boardData_1_0_IPQ4019_DK04_2G.bin 907a00b773da181a52e16e8eeed7a7a1 664
+F lib/firmware/IPQ4019/hw.1/SG/boardData_1_0_IPQ4019_DK04_5G.bin e3fed2af186f523229e6be92a58de01a 664
+F lib/firmware/IPQ4019/hw.1/SG/boarddata_0.bin 907a00b773da181a52e16e8eeed7a7a1 664
+F lib/firmware/IPQ4019/hw.1/SG/boarddata_1.bin 0029bb9d99adabdf75fe5e68339ff9f9 664
+D lib/firmware/IPQ4019/hw.1/SRRC
+F lib/firmware/IPQ4019/hw.1/SRRC/boardData_1_0_IPQ4019_DK04_2G.bin bae2b425154fa84ca9df37ab82b8bf76 664
+F lib/firmware/IPQ4019/hw.1/SRRC/boardData_1_0_IPQ4019_DK04_5G.bin 6a60c6241656602eb281d4c827f92ea2 664
+F lib/firmware/IPQ4019/hw.1/SRRC/boarddata_0.bin bae2b425154fa84ca9df37ab82b8bf76 664
+F lib/firmware/IPQ4019/hw.1/SRRC/boarddata_1.bin 7feef2c1a1b40e6ae14864af8d472f14 664
+F lib/firmware/IPQ4019/hw.1/athwlan.bin b6163343fab5ed3210fd5746b294c028 644
+F lib/firmware/IPQ4019/hw.1/athwlan.codeswap.bin 368883406134772d135a812eb89085a1 644
+F lib/firmware/IPQ4019/hw.1/boardData_1_0_IPQ4019_DK01_2G.bin 3296cc630096e1cb7f7c80902990d972 755
+F lib/firmware/IPQ4019/hw.1/boardData_1_0_IPQ4019_DK01_5G.bin d980c3c8105b5f78fca1cd489f51655a 755
+F lib/firmware/IPQ4019/hw.1/boardData_1_0_IPQ4019_DK03_wifi0.bin 11c70b64c714c30d040fcd7b0ef3f53f 755
+F lib/firmware/IPQ4019/hw.1/boardData_1_0_IPQ4019_DK03_wifi1.bin 1192c7a4fef9f5abfce1b79e4a13342c 755
+F lib/firmware/IPQ4019/hw.1/boardData_1_0_IPQ4019_DK04_2G.bin ad1e2924e64ee8c9f8756dd511a161c6 664
+F lib/firmware/IPQ4019/hw.1/boardData_1_0_IPQ4019_DK04_2G_neg_pwr.bin 1624f57d047213461e1aaf5a1e06ef46 755
+F lib/firmware/IPQ4019/hw.1/boardData_1_0_IPQ4019_DK04_5G.bin db9b2aafa442140e7327020cfa98f09b 664
+F lib/firmware/IPQ4019/hw.1/boardData_1_0_IPQ4019_DK04_5G_neg_pwr.bin 84d496ad588835e31107759c57b159aa 755
+F lib/firmware/IPQ4019/hw.1/boardData_1_0_IPQ4019_DK05_2G.bin 9bb3adac37f4418be2f7a85c691d244f 755
+F lib/firmware/IPQ4019/hw.1/boardData_1_0_IPQ4019_DK05_5G.bin 7c3b0f989a573c46292ebcd1a35c81d5 755
+F lib/firmware/IPQ4019/hw.1/boardData_1_0_IPQ4019_DK06_2G.bin 859fca3043545ce3879566f1f84fc974 755
+F lib/firmware/IPQ4019/hw.1/boardData_1_0_IPQ4019_DK06_5G.bin a5e9a48d9e9e676cb77a1aca729af0f7 755
+F lib/firmware/IPQ4019/hw.1/boardData_1_0_IPQ4019_DK07_wifi0_2G.bin 8eacb5484e18a0b4e8767e141ea61a48 755
+F lib/firmware/IPQ4019/hw.1/boardData_1_0_IPQ4019_DK07_wifi0_5G_HB.bin 75c59e5dd173183c3c726e7148ba9bf5 755
+F lib/firmware/IPQ4019/hw.1/boardData_1_0_IPQ4019_DK07_wifi1_5G_LB.bin 4904431aa7ea8def7a3521e673c91ce0 755
+F lib/firmware/IPQ4019/hw.1/boardData_1_0_IPQ4019_Y9803_wifi0.bin cb5dcb0337706c313ea3342587b283ae 755
+F lib/firmware/IPQ4019/hw.1/boardData_1_0_IPQ4019_Y9803_wifi1.bin 1aa45fad7a0d6f1c5774b251c712c67c 755
+F lib/firmware/IPQ4019/hw.1/boardData_1_0_IPQ4019_YA131_wifi0.bin 1e65dec7fd929646b392c623bd9f3ff0 755
+F lib/firmware/IPQ4019/hw.1/boardData_1_0_IPQ4019_YA131_wifi1.bin e676f159de8afd74df3fecc8ecf94389 755
+F lib/firmware/IPQ4019/hw.1/boarddata_0.bin ad1e2924e64ee8c9f8756dd511a161c6 664
+F lib/firmware/IPQ4019/hw.1/boarddata_1.bin f1aa74a1412603b9c4d1a8fb03846b3c 664
+F lib/firmware/IPQ4019/hw.1/otp.bin 9bf1ece98619a276710bbdfdc8a54386 644
+F lib/firmware/IPQ4019/hw.1/utf.bin 5f095d97f7a9bb3b8fbac2936e5bc873 644
+F lib/firmware/IPQ4019/hw.1/utf.codeswap.bin d4c2d8dd52a568a7cdc37f6b42eaa10f 644
+D lib/firmware/QCA9888
+D lib/firmware/QCA9888/hw.2
+D lib/firmware/QCA9888/hw.2/AU
+F lib/firmware/QCA9888/hw.2/AU/boardData_2_0_QCA9888_5G_Y9484.bin 368753f2e46dc165a23908d3dbd11767 775
+F lib/firmware/QCA9888/hw.2/AU/boardData_2_0_QCA9888_5G_YA105.bin 503b1f56ea10c4f9d3da1ca8b2c958aa 664
+F lib/firmware/QCA9888/hw.2/AU/boarddata_2.bin 368753f2e46dc165a23908d3dbd11767 664
+D lib/firmware/QCA9888/hw.2/Canada
+F lib/firmware/QCA9888/hw.2/Canada/boardData_2_0_QCA9888_5G_Y9484.bin 959ed96cb0ceb1d8ec07204eb6823ef5 775
+F lib/firmware/QCA9888/hw.2/Canada/boardData_2_0_QCA9888_5G_YA105.bin 9580069b4eefdf5a1d78bb2ef08656ac 664
+F lib/firmware/QCA9888/hw.2/Canada/boarddata_2.bin 959ed96cb0ceb1d8ec07204eb6823ef5 664
+D lib/firmware/QCA9888/hw.2/FCC_ETSI
+F lib/firmware/QCA9888/hw.2/FCC_ETSI/boardData_2_0_QCA9888_5G_Y9484.bin ef84f0eba6035c5f4233d1c52f3d4d0e 664
+F lib/firmware/QCA9888/hw.2/FCC_ETSI/boardData_2_0_QCA9888_5G_YA105.bin 498441d689f0731e0e73434fea08f5c1 664
+F lib/firmware/QCA9888/hw.2/FCC_ETSI/boarddata_2.bin ef84f0eba6035c5f4233d1c52f3d4d0e 664
+D lib/firmware/QCA9888/hw.2/HK
+F lib/firmware/QCA9888/hw.2/HK/boardData_2_0_QCA9888_5G_Y9484.bin 368753f2e46dc165a23908d3dbd11767 664
+F lib/firmware/QCA9888/hw.2/HK/boarddata_2.bin 368753f2e46dc165a23908d3dbd11767 664
+D lib/firmware/QCA9888/hw.2/INS
+F lib/firmware/QCA9888/hw.2/INS/boardData_2_0_QCA9888_5G_Y9484.bin 6cda8d50534284cd5fa9c6c0dff2dcf5 664
+F lib/firmware/QCA9888/hw.2/INS/boardData_2_0_QCA9888_5G_YA105.bin 6c665e2bcb6504b56435f681654b0033 775
+F lib/firmware/QCA9888/hw.2/INS/boarddata_2.bin 6cda8d50534284cd5fa9c6c0dff2dcf5 775
+D lib/firmware/QCA9888/hw.2/Korea
+F lib/firmware/QCA9888/hw.2/Korea/boardData_2_0_QCA9888_5G_Y9484.bin 02e86224609fa7aa88bcc0eef8d688b4 664
+F lib/firmware/QCA9888/hw.2/Korea/boarddata_2.bin 02e86224609fa7aa88bcc0eef8d688b4 664
+D lib/firmware/QCA9888/hw.2/Mexico
+F lib/firmware/QCA9888/hw.2/Mexico/boardData_2_0_QCA9888_5G_Y9484.bin 368753f2e46dc165a23908d3dbd11767 775
+F lib/firmware/QCA9888/hw.2/Mexico/boardData_2_0_QCA9888_5G_YA105.bin 503b1f56ea10c4f9d3da1ca8b2c958aa 664
+F lib/firmware/QCA9888/hw.2/Mexico/boarddata_2.bin 368753f2e46dc165a23908d3dbd11767 664
+D lib/firmware/QCA9888/hw.2/SA
+F lib/firmware/QCA9888/hw.2/SA/boardData_2_0_QCA9888_5G_Y9484.bin e842e2eeb8216a7ac19510f835610d22 664
+F lib/firmware/QCA9888/hw.2/SA/boarddata_2.bin e842e2eeb8216a7ac19510f835610d22 664
+D lib/firmware/QCA9888/hw.2/SG
+F lib/firmware/QCA9888/hw.2/SG/boardData_2_0_QCA9888_5G_Y9484.bin b3176232733f397088dc44bf83289ff4 664
+F lib/firmware/QCA9888/hw.2/SG/boarddata_2.bin b3176232733f397088dc44bf83289ff4 664
+D lib/firmware/QCA9888/hw.2/SRRC
+F lib/firmware/QCA9888/hw.2/SRRC/boardData_2_0_QCA9888_5G_Y9484.bin 52e2494ac038a9902275538ab5869ed3 664
+F lib/firmware/QCA9888/hw.2/SRRC/boardData_2_0_QCA9888_5G_YA105.bin 8cfcd4b088b4fa3e5ae6219df915d3cc 664
+F lib/firmware/QCA9888/hw.2/SRRC/boarddata_2.bin 52e2494ac038a9902275538ab5869ed3 664
+F lib/firmware/QCA9888/hw.2/athwlan.bin 726ce4d01372dc674eaa4e56f196356c 644
+F lib/firmware/QCA9888/hw.2/athwlan.codeswap.bin 815530af67eb3aca659d81cc547fd797 644
+F lib/firmware/QCA9888/hw.2/boardData_2_0_QCA9888_5G_Y9484.bin ef84f0eba6035c5f4233d1c52f3d4d0e 664
+F lib/firmware/QCA9888/hw.2/boardData_2_0_QCA9888_5G_Y9582.bin 206c1d7357e06051d776c8bdfa2b6099 755
+F lib/firmware/QCA9888/hw.2/boardData_2_0_QCA9888_5G_Y9690.bin 8924ef5a754f96c26cb4be2b7c22e38d 755
+F lib/firmware/QCA9888/hw.2/boardData_2_0_QCA9888_5G_Y9690_SBS_HB.bin ae3febff0d0bcd7dd4168fa53f6b224d 755
+F lib/firmware/QCA9888/hw.2/boardData_2_0_QCA9888_5G_YA105.bin 498441d689f0731e0e73434fea08f5c1 664
+F lib/firmware/QCA9888/hw.2/boardData_2_0_QCA9888_5G_YA841.bin 4b337e9780afe0575db3b4e038ed55ef 755
+F lib/firmware/QCA9888/hw.2/boarddata_0.bin 8924ef5a754f96c26cb4be2b7c22e38d 755
+F lib/firmware/QCA9888/hw.2/boarddata_1.bin 4e741ab804a2fd47c09f5a87a1312494 755
+F lib/firmware/QCA9888/hw.2/boarddata_2.bin ef84f0eba6035c5f4233d1c52f3d4d0e 664
+F lib/firmware/QCA9888/hw.2/otp.bin ef46de39cc05422a5091e8c72530ae41 644
+F lib/firmware/QCA9888/hw.2/utf.bin d6af20f139f44dc325ae50c1b53e0c5f 644
+F lib/firmware/QCA9888/hw.2/utf.codeswap.bin 8ab2f517d871fd9a6fe1931c10b12865 644
+F lib/functions/hyfi-debug.sh 67adae0e70a1a3e28bdac18bc6e0c1b8 755
+F lib/functions/hyfi-iface.sh 8316e75ab22b953c2d22a44c7ac92683 755
+F lib/functions/hyfi-network.sh 6ffd70fd1110c50c6d7a81c68cc4216b 755
+F lib/functions/lbd-config.sh 9f7ed16843c48e99168d3ee1c3850412 755
+F lib/functions/repacd-ethmon.sh 5560f2d7b2ccc4ff92ebd967e2f1c68b 755
+F lib/functions/repacd-gwmon.sh 44193da4650e912b7ae821216b41f60a 755
+F lib/functions/repacd-led.sh 28d7c7786bc29b5ebdb5e2675762b473 755
+F lib/functions/repacd-lp.sh 8d8a9bf2786708343319b6d9966c09f8 755
+F lib/functions/repacd-netdet.sh 318242e84a28667072b5f14f18c3ff8e 755
+F lib/functions/repacd-wifimon.sh a98679f504a3dea62a9c9b44da85432a 755
+F lib/functions/whc-debug.sh 88ea771f4c23d9492dc2c4c5d118026a 755
+F lib/functions/whc-iface.sh d0e4736df4861310080651a9d2ce98c5 755
+F lib/functions/whc-network.sh 552067d240a0754b7a30a953758ee735 755
+F lib/modules/3.14.77/asf.ko f63e8702529167fd6fc65f2041ffbe18 644
+F lib/modules/3.14.77/ath_dev.ko 2799dd8e078c03823314a18fb7cf7c0b 644
+F lib/modules/3.14.77/ath_dfs.ko fde70577d5917ae3e8a6627798971aa7 644
+F lib/modules/3.14.77/ath_hal.ko 78bdf45c1efa8d8d03164f7864586179 644
+F lib/modules/3.14.77/ath_pktlog.ko d2709ce2687db333367f976bfbe46629 644
+F lib/modules/3.14.77/ath_rate_atheros.ko d48b2cc814e1e059def9467a79b284ab 644
+F lib/modules/3.14.77/ath_spectral.ko 5d683ceb58d1e7e3ba4ffe1e2b2588f8 644
+F lib/modules/3.14.77/hst_tx99.ko f159c6b2cc3995aaf96b452484b58138 644
+F lib/modules/3.14.77/hyfi-bridging.ko ec5b886c51cfb0cd0f0379dd7e9341be 644
+F lib/modules/3.14.77/hyfi-iptv-helper.ko 5aa38b7d08bf5a582effd0bab31b12e1 644
+F lib/modules/3.14.77/hyfi_qdisc.ko b3c25ce512d33a142645dfbca64d4b7f 644
+F lib/modules/3.14.77/mem_manager.ko 0f2e7b388db0693c04944d1a22686c3b 644
+F lib/modules/3.14.77/qca_da.ko 49d60b7f7d5e771d279ecea7be33b639 644
+F lib/modules/3.14.77/qca_ol.ko 06910303de442f745e0747beb97efda7 644
+F lib/modules/3.14.77/qdf.ko a3bc98ae0bb81471f5cba26aca717d12 644
+F lib/modules/3.14.77/smart_antenna.ko b597540716def6c3038748a83eaaf9eb 644
+F lib/modules/3.14.77/umac.ko 040cef543620af689eb33496e7a7651f 644
+F lib/modules/3.14.77/wlan_ext.ko 4b313cea7129ca12c96f3fe99bce6e7c 644
+D lib/sbin
+F lib/sbin/wifi_try b617505cd1c27e203d7a0dd952a20cdc 755
+F lib/wifi/33-qca-wifi_dni-10.4-unified-profile 0f2be7221b06a724482155b7e0b51c2c 644
+F lib/wifi/iface_mgr.sh fa451c86c6487775e330694184e47303 644
+F lib/wifi/qcawifi_countrycode.txt 9031b90c9d6c0f54dc4932eefc0926de 644
+L linuxrc bin/busybox
+D opt
+D opt/etc
+D opt/etc/usi
+F opt/etc/usi.conf 9957d67a971fcc609d4dafe6bbd053fd 664
+D opt/etc/usi/profiles
+F opt/etc/usi/profiles/d2.profile 1eaf1fd94de7b37dd17e6fd1c449aa50 664
+L opt/etc/usi/usi.profile profiles/d2.profile
+D opt/usi
+F opt/usi/usi 04f4ae59ee471ef177fa70c63d19ce86 775
+D opt/xagent
+D opt/xagent/certs
+F opt/xagent/certs/ca-bundle-mega.crt eddcedb6d0dd497f5a691f51cb687140 664
+F opt/xagent/genie_handler a88cff210b7374a38735fa2236fdb8a6 775
+F opt/xagent/run-xagent.sh 880bd0ad8571913d2314d8a19d1fd488 775
+F opt/xagent/xagent cffbe9bfd3f4a2bb98d8a8c6503ff4e3 775
+F opt/xagent/xagent_control d5e2dd12ebe38c79c2d7a9b7ecaacf80 775
+F sbin/firewall_debug.sh 9e80bac78530a1244e147aba01002ba1 755
+L sbin/ifdown ../bin/busybox
+L sbin/ifup ../bin/busybox
+L sbin/ipaddr ../bin/busybox
+L sbin/iplink ../bin/busybox
+L sbin/ipneigh ../bin/busybox
+L sbin/iproute ../bin/busybox
+L sbin/iprule ../bin/busybox
+L sbin/iptunnel ../bin/busybox
+F sbin/logread 1db1af49be8d0054af5647da96721ca3 755
+L sbin/run-init ../bin/busybox
+L sbin/swapoff ../bin/busybox
+L sbin/swapon ../bin/busybox
+L sbin/tc ../bin/busybox
+F sbin/uci2cfg.sh 58e9e4cd5ec52c1202d00debcca11b0d 755
+L usr/bin/blkdiscard ../../bin/busybox
+F usr/bin/bst_daemon 310de11c7b2f711ccee27c4e86dd8858 755
+F usr/bin/bsttest 3ba7b2d96916efd688d59f0c48a83761 755
+F usr/bin/btdm 322bd027ccd63d2fe8ab51edcc19d386 755
+F usr/bin/caller 2f4272ece6b384e467335b39b9bfc65a 755
+F usr/bin/csh 8966736aa6c3496e0679c0070beb4f74 755
+F usr/bin/d2 e1581d803162f624c4d0b4e28b3aa18d 755
+F usr/bin/d2d 598595802e0890578c1cb5916be3a814 755
+F usr/bin/dal f0adf7707d6d5b723fec532b09335fc4 755
+F usr/bin/dal_ash 177d452d04a62c68d0b5ae001bc2b385 755
+F usr/bin/dal_ra 2ab0e607531afd13f998005d2591d578 755
+F usr/bin/dalh c4308273c6c8f924c21873de25828c41 755
+F usr/bin/diltest b8029d4aae0778492b80f00002997846 755
+L usr/bin/dumpleases ../../bin/busybox
+F usr/bin/evsinkd2 8b287a80dbebb4cbc85adc52b15f7a79 775
+L usr/bin/factor ../../bin/busybox
+L usr/bin/fallocate ../../bin/busybox
+F usr/bin/feature_switch.sh 5f7c9e12feb0b3cdde1fdb186722bf61 755
+F usr/bin/fing_dil bdcd8052e13a36902a3bb76f2a739491 755
+L usr/bin/hexedit ../../bin/busybox
+F usr/bin/jsontest 969548454f95fcfb927739e42a6fa86a 755
+L usr/bin/lsscsi ../../bin/busybox
+L usr/bin/lzcat ../../bin/busybox
+L usr/bin/lzma ../../bin/busybox
+L usr/bin/nl ../../bin/busybox
+L usr/bin/nproc ../../bin/busybox
+L usr/bin/nsenter ../../bin/busybox
+L usr/bin/paste ../../bin/busybox
+F usr/bin/pushntftest 6b8e1f0899aaed8cd0a3ce1674dfe319 755
+F usr/bin/seal_randcron f114b6a187fd8c9e4d5cd9e52d75093a 755
+F usr/bin/seal_randinit 7fbec41a59bfc1437f1200560a4cb613 755
+L usr/bin/setfattr ../../bin/busybox
+F usr/bin/setlogLevelForDAL.sh 88c10b2810e7df6c1f73dbb8c81f80e0 755
+L usr/bin/shred ../../bin/busybox
+F usr/bin/ssh-keygen 2606bb93a7d5a5da6843aa1685107e70 755
+L usr/bin/ssl_client ../../bin/busybox
+L usr/bin/svc ../../bin/busybox
+L usr/bin/svok ../../bin/busybox
+F usr/bin/trigger_event 8fb39ec569c6bdd97188ade2f58f821d 755
+L usr/bin/ts ../../bin/busybox
+L usr/bin/unshare ../../bin/busybox
+F usr/bin/upagent 409697f99add76791130898a353d164d 755
+L usr/bin/w ../../bin/busybox
+L usr/bin/xxd ../../bin/busybox
+D usr/include/d2lib
+F usr/include/d2lib/d2_pdu.h 7167cc2c18141a1d8f58fbaabaa21047 664
+F usr/include/d2lib/d2api.h 6b792501fafdf4b01e6c7477ee56a3fc 664
+F usr/include/d2lib/sortedset.h dba1325a2b36c5f772153571b41d9711 664
+F usr/include/dyn_log.h 26db65ecfa4cdd7ef16af111dd7d13d6 664
+F usr/include/fw_check.h bb5f123d3f927900b7473a0457beb253 644
+F usr/include/libdal.h 467b85beada5c48e0f8dedbe8203f7b6 644
+F usr/include/libusi.h 5f5f8d6e7fe69fef37c04cc0d07a1d75 664
+F usr/lib/libcjson.so ab595ca9c78148c61b57d78d77692d97 755
+F usr/lib/libcjson.so.1 ab595ca9c78148c61b57d78d77692d97 755
+F usr/lib/libcjson.so.1.7.13 ab595ca9c78148c61b57d78d77692d97 755
+F usr/lib/libcurl.so.4.7.0 5aa005b5a69fa27bf6c956b6dc292ec1 755
+F usr/lib/libd2bst.so 61946a1e85b7a8cbd6e543da15f4fb04 755
+F usr/lib/libd2dynlog.a 84ee310004e2fb96e43fe5794dbb20e0 755
+F usr/lib/libd2lib.a cfb6b7ca56305efe3e31a552ee1bbbe7 755
+F usr/lib/libdillib.so 71741a2599693ea06b6a156c0a8ab619 755
+F usr/lib/libdjson.so 3519daf581c26e5bd9840d2dd4df8e28 755
+F usr/lib/libexpat.so.1.6.12 b4a16740f22200c45860669eb1f3eead 644
+F usr/lib/libfwcheck.a 7f761043e5ffcc0df34695cd76407de7 755
+F usr/lib/libfwcheck.so 8929d9ee9a5ea25e983de7c264d8896d 755
+F usr/lib/libhyfi-bridge.so e9f54c4798ce5a56ae8dcb4951bcaee2 755
+F usr/lib/libhyficommon.so c7ff9f824e03965d31ba92ef89faf3c6 755
+F usr/lib/libieee1905.so b734f78b642f28d6e6adf0dae56221f5 755
+F usr/lib/liblbcmnlibs.so d0b556fda3f814acdcef64c4651c4d29 755
+F usr/lib/libmcfwdtbleswitch.so 23520ccec68dcf9a81265968872b502b 755
+F usr/lib/libmcfwdtblwlan2g.so 5b06003da752f3d286b9db6f5cf775ba 755
+F usr/lib/libmcfwdtblwlan5g.so 3ad6a6a88b0fc27bc0d448dc197102e2 755
+L usr/lib/libpam.so libpam.so.0.85.1
+L usr/lib/libpam.so.0 libpam.so.0.85.1
+F usr/lib/libpam.so.0.85.1 62d82e31a5d5a92d958518c9bd8a39df 755
+L usr/lib/libpam_misc.so libpam_misc.so.0.82.1
+L usr/lib/libpam_misc.so.0 libpam_misc.so.0.82.1
+F usr/lib/libpam_misc.so.0.82.1 0b4cd6fe80133c358ed653b4faae232b 755
+L usr/lib/libpamc.so libpamc.so.0.82.1
+L usr/lib/libpamc.so.0 libpamc.so.0.82.1
+F usr/lib/libpamc.so.0.82.1 98e8d162dcc0a6c6c9bb2e2f212c03b1 755
+F usr/lib/libpcre.so.1.2.12 33986d172909bf3cebcbd66bdaae478f 755
+F usr/lib/libpcreposix.so.0.0.7 70619df98824f4497a0727c4ef602bb6 755
+F usr/lib/libpluginManager.so c0d802e92736d15b3bcdb23bf9497d76 755
+F usr/lib/libpsService.so 72c3d6955f19bbaeace9ba46219a2482 755
+F usr/lib/libqca_wifison_ext.so 02ffcf33d960312debbdbc70dc22af57 755
+F usr/lib/libstorage.so 759dcda909a371a8083446a4c7cf7b0b 755
+F usr/lib/libtlvcmdrsp.so a0f634d650f3376be37fbc10e71ccf1c 644
+F usr/lib/libtlvencoder.so 090ca9a4559d976dbac6cf8dfbd60ef7 644
+F usr/lib/libtlvparser.so 1861dd2c20ec9f7de2844ebbbf21099e 644
+F usr/lib/libtlvtemplate.so 04d9c471baee43cb7a2e01613a5821a9 644
+F usr/lib/libtlvutil.so 8025b3404cd8c588c2aa8fd95ab5cea8 644
+F usr/lib/libusi.so cb2797e2528c8bcd9907e19006e8dc37 775
+F usr/lib/libwpa2.so 1ff310be2d52b8ebcd8ef8e0fae4ffe2 755
+D usr/lib/lua
+D usr/lib/lua/luci
+D usr/lib/lua/luci/controller
+F usr/lib/lua/luci/controller/whc.lua a296fdec77acd18e0851439bec5d08bf 755
+D usr/lib/lua/luci/model
+D usr/lib/lua/luci/model/cbi
+D usr/lib/lua/luci/model/cbi/whc
+F usr/lib/lua/luci/model/cbi/whc/lbd.lua 41b864499f44e0a3815a1568f62001c8 755
+F usr/lib/lua/luci/model/cbi/whc/lbd_advanced.lua 77718989ef3f8feec02ca9dd9770e00a 755
+F usr/lib/lua/luci/model/cbi/whc/lbd_diaglog.lua 7a75ad9155f154a6ced9ae088acbfd60 755
+F usr/lib/lua/luci/model/cbi/whc/repacd.lua 87bcabcf64f2476e13819cd4bb63ad0a 755
+F usr/lib/lua/luci/model/cbi/whc/repacd_advanced.lua 9e78b176c5eab139c90bf2a817aab2fc 755
+D usr/lib/lua/luci/view
+D usr/lib/lua/luci/view/whc
+F usr/lib/lua/luci/view/whc/lbd_btn_adv.htm a209552ca1e4c44172268373e110263f 755
+F usr/lib/lua/luci/view/whc/lbd_btn_diag.htm c82f8ae04f717f3326bf658e5cf371d4 755
+F usr/lib/lua/luci/view/whc/lbd_dview_js.htm a19f0ce160a0ff91f60bee4338f593eb 755
+F usr/lib/lua/luci/view/whc/repacd_btn_adv.htm bed4601dc5c47ad0aac0ebc31ae18e7a 755
+F usr/lib/lua/luci/view/whc/repacd_dview_js.htm 0eca1ff09e2a70f5b76e7293881047c1 755
+F usr/lib/opkg/info/ash.control 8f057af63fefc1353dcb5dafe554af67 644
+F usr/lib/opkg/info/ash.list dd89520fe470e29dcd636087317568ff 644
+F usr/lib/opkg/info/bst.control d13a009bfc886268e0edf2bef79f6992 644
+F usr/lib/opkg/info/bst.list d3d5c965cfba96064d7dd571f6d825f9 644
+F usr/lib/opkg/info/control-firmware.control e500baec68aae05b2f82ad73c8131918 644
+F usr/lib/opkg/info/control-firmware.list ed4a905b90e72cecc3abc3ea6510fd8b 644
+F usr/lib/opkg/info/csh.control b33be059850ff585e7e74927a2cf6639 644
+F usr/lib/opkg/info/csh.list 22131719de2cafd9ac6ab67a521d6117 644
+F usr/lib/opkg/info/dalutil.control 0873a64bad054e3ce88d882feb873cde 644
+F usr/lib/opkg/info/dalutil.list 08c3eec734beee1ba03024634bbb28cb 644
+F usr/lib/opkg/info/fwcheck.control 93737d89f8f366bb49a142d87f421589 644
+F usr/lib/opkg/info/fwcheck.list d38f57ec5b56dfd07eb606dbfec884be 644
+F usr/lib/opkg/info/kmod-qca-hyfi-bridge_dni.control bdbfe70bf63569dcc1b7566fd8fbf872 644
+F usr/lib/opkg/info/kmod-qca-hyfi-bridge_dni.list 4ab13c502d1300a7cda22644415eff10 644
+F usr/lib/opkg/info/kmod-qca-hyfi-iptv-helper_dni.control f2aab630868aaea976e5cb44135b4f86 644
+F usr/lib/opkg/info/kmod-qca-hyfi-iptv-helper_dni.list dfd785b8f510962bf3672937a8864487 644
+F usr/lib/opkg/info/kmod-qca-hyfi-qdisc_dni.control 65fecc96bf57ad6fbca743e76c784271 644
+F usr/lib/opkg/info/kmod-qca-hyfi-qdisc_dni.list 3bd50af8f6f89c433827b3dac32e908a 644
+F usr/lib/opkg/info/kmod-qca-wifi_dni-10.4-unified-profile.control 6868998298302a0586e1ad15303bc6b9 644
+F usr/lib/opkg/info/kmod-qca-wifi_dni-10.4-unified-profile.list 1c02f06c1626566ebabea174120a8254 644
+F usr/lib/opkg/info/libhyficommon_dni.control 48c1f6f5acbddfe73ac7e0e73025d4de 644
+F usr/lib/opkg/info/libhyficommon_dni.list ab1545947890a57611b4e5f8230ffe8c 644
+F usr/lib/opkg/info/libieee1905_dni.control c0d1238c6a581fc773b3724f921f4ff9 644
+F usr/lib/opkg/info/libieee1905_dni.list bcf7f6b8cad94224f568236420ec0b5b 644
+F usr/lib/opkg/info/libpam.control beb31cda90631934156a4029770312d3 644
+F usr/lib/opkg/info/libpam.list 89a76f9d39dedb7198349755015622fe 644
+F usr/lib/opkg/info/libstorage_dni.control 24013489c841324d1b570a15d5901619 644
+F usr/lib/opkg/info/libstorage_dni.list 8044ac95090f9204a1640d6583ed3848 644
+F usr/lib/opkg/info/libwpa2_dni.control 8dca3bc7732659d8d25b7258a48f6099 644
+F usr/lib/opkg/info/libwpa2_dni.list bb390ce3b78edbb6d7d4e15c4e51409e 644
+F usr/lib/opkg/info/luci-whc_dni-lbd-advanced.control 31daf315d4343596e23cd074c1f9e8d1 644
+F usr/lib/opkg/info/luci-whc_dni-lbd-advanced.list b772acdd5f0af4df3ca532078011b5cc 644
+F usr/lib/opkg/info/luci-whc_dni-lbd-diaglog.control 62afa71784ed56f696dbf11da4af900a 644
+F usr/lib/opkg/info/luci-whc_dni-lbd-diaglog.list 036dc01b7b14d50f7be4300567449ec1 644
+F usr/lib/opkg/info/luci-whc_dni-lbd.control ae222e2165c02cb427ccc7d3cd86f1b6 644
+F usr/lib/opkg/info/luci-whc_dni-lbd.list b7e195417d4fc368b1451620baccee96 644
+F usr/lib/opkg/info/luci-whc_dni-repacd-advanced.control dd5f72513717a6eebd9972d355ccbbea 644
+F usr/lib/opkg/info/luci-whc_dni-repacd-advanced.list c2573bd2030a0a337e521806455827dc 644
+F usr/lib/opkg/info/luci-whc_dni-repacd.control 0828534abab3260199f0702189dfe6d0 644
+F usr/lib/opkg/info/luci-whc_dni-repacd.list 5c3a376388d51a05fa72a82fe03dfdac 644
+F usr/lib/opkg/info/luci-whc_dni.control be5c47d01f57ac537aaff85d58702e67 644
+F usr/lib/opkg/info/luci-whc_dni.list e79b4ce11bd57e17d5c9fa88f48488f4 644
+F usr/lib/opkg/info/net-web-language-table.control aa61e4e138b8854ab1321eabe32ab779 644
+F usr/lib/opkg/info/net-web-language-table.list d41d8cd98f00b204e9800998ecf8427e 644
+F usr/lib/opkg/info/openssh-keygen.control 395a2bef88ec9ee573e983808bddbfee 644
+F usr/lib/opkg/info/openssh-keygen.list b40b7c990bc18eeacdef3759d73be0a1 644
+F usr/lib/opkg/info/openssh-server-pam.conffiles 1f8455f2a3359249400118a2763361e2 644
+F usr/lib/opkg/info/openssh-server-pam.control 85268ad2df6043eaad76427674b4cc0b 644
+F usr/lib/opkg/info/openssh-server-pam.list 36a0597c915212709a6de0bc4cdaeff9 644
+F usr/lib/opkg/info/pushntf.control 41a9d61ce21b7f46829d57198974941c 644
+F usr/lib/opkg/info/pushntf.list 20fb9d9cc5a84ce2721d35dfc6b97333 644
+F usr/lib/opkg/info/qca-acd_dni.control 670a5f1367105f14809827c1e8633f0f 644
+F usr/lib/opkg/info/qca-acd_dni.list 324f3444a6074c743e1b08257a64818b 644
+F usr/lib/opkg/info/qca-hostap_dni-10.4.control 403388eb408ac9b589abee7803f9c35a 644
+F usr/lib/opkg/info/qca-hostap_dni-10.4.list 580928d690f05323882eae8f2b212dcf 644
+F usr/lib/opkg/info/qca-hostapd-cli_dni-10.4.control 370bcbefc2494f37b53b38ff607a4835 644
+F usr/lib/opkg/info/qca-hostapd-cli_dni-10.4.list 5d3701f8c0f17add85f14481d0f84244 644
+F usr/lib/opkg/info/qca-hyctl_dni.control 05e1e8484e005d52ca9d48c45e32a2ac 644
+F usr/lib/opkg/info/qca-hyctl_dni.list 2cfe92f3bdf4abce5f7a0ded504632c1 644
+F usr/lib/opkg/info/qca-hyd_dni.control 6ab43b0fc9cc3666cbac71227a174345 644
+F usr/lib/opkg/info/qca-hyd_dni.list a6209a4cea85a36eb3c6fcbb67646daf 644
+F usr/lib/opkg/info/qca-ieee1905-init_dni.control a8fb611455f6ec08e2fa7ca0fc96ca36 644
+F usr/lib/opkg/info/qca-ieee1905-init_dni.list e84a3ef9b9d9c8054888ad0c32fe0343 644
+F usr/lib/opkg/info/qca-iface-mgr_dni-10.4.control 233fea2f32d5f73971220f3b6e5afd83 644
+F usr/lib/opkg/info/qca-iface-mgr_dni-10.4.list b3fb5e2f00d6d2b67d62e8fc5592e9f7 644
+F usr/lib/opkg/info/qca-libhyfi-bridge_dni.control 2f3e68a3fcddef5559c1312ea8dacf6e 644
+F usr/lib/opkg/info/qca-libhyfi-bridge_dni.list 72aca58f8f19e072347ad4eb93d9edd5 644
+F usr/lib/opkg/info/qca-whc-init_dni.control f2f14ebd6e1412405f9901ff852ef335 644
+F usr/lib/opkg/info/qca-whc-init_dni.list 4be8042aca06a4560b446482f9918d0c 644
+F usr/lib/opkg/info/qca-whc-lbd_dni.control c1e218d049ac09e625b65e6895011373 644
+F usr/lib/opkg/info/qca-whc-lbd_dni.list dc67d3e194d50ab262516fcc99ddad6a 644
+F usr/lib/opkg/info/qca-whc-repacd_dni.control 6ad4d1f7e5015c2688530e45485607e0 644
+F usr/lib/opkg/info/qca-whc-repacd_dni.list 20a5fe599e02d167becc4ad4ac8df100 644
+F usr/lib/opkg/info/qca-wifi-fw_dni-hw11-10.4-asic.control 6db7fcc6d221083f75781a6c22f02edd 644
+F usr/lib/opkg/info/qca-wifi-fw_dni-hw11-10.4-asic.list eceb24898f1d31b7bda513cba16a7855 644
+F usr/lib/opkg/info/qca-wifi-fw_dni-hw5-10.4-asic.control 1bfcfebb76e439fdffb8b78aad3803a3 644
+F usr/lib/opkg/info/qca-wifi-fw_dni-hw5-10.4-asic.list 7a1fd585b6cffb50b32360d4b5fa8fa8 644
+F usr/lib/opkg/info/qca-wifison-ext-lib_dni.control be35e3f4a2607a9641559ce4e0a28f52 644
+F usr/lib/opkg/info/qca-wifison-ext-lib_dni.list 0c181b3f40e1682e381c730f17dbe497 644
+F usr/lib/opkg/info/qca-wpa-cli_dni-10.4.control 48a99ecf976c32939c73b2a6f2e03f98 644
+F usr/lib/opkg/info/qca-wpa-cli_dni-10.4.list 7610347324af4964d57f2337660a70b5 644
+F usr/lib/opkg/info/qca-wpa-supplicant_dni-10.4.control 993ce1da5477acaef51f782f55e7d1f6 644
+F usr/lib/opkg/info/qca-wpa-supplicant_dni-10.4.list 0951e76e6b49e52f8f29d90eb1dc70c3 644
+F usr/lib/opkg/info/qca-wsplcd_dni.control b768c426c2635c5b1e47e49c1d337690 644
+F usr/lib/opkg/info/qca-wsplcd_dni.list e69e40a2035639cab172dbe7865d6781 644
+F usr/lib/opkg/info/qcmbr_dni-10.4.control 46157b8d96b160d07ef957265acea75f 644
+F usr/lib/opkg/info/qcmbr_dni-10.4.list 6491a19b2e4fc8d5cea75f0d336ac7b5 644
+F usr/lib/opkg/info/ra.control 2210544fdeee71734632f94c61832bc1 644
+F usr/lib/opkg/info/ra.list 4506e50566f696da6880b5d360ed4d8a 644
+F usr/lib/opkg/info/remGenie.control a75e0ca14e860a9b2380a99b64161995 644
+F usr/lib/opkg/info/remGenie.list 88cc1784c1054ed68142a02a1e3b4918 644
+F usr/lib/opkg/info/upagent.control 5f765aa9175362bdf4010ada574c3dc7 644
+F usr/lib/opkg/info/upagent.list e4fe3217c0b4fe4d9874a884008c503e 644
+F usr/lib/opkg/info/xagent.control 0f92c0fb03057efeb65190fc270018c2 644
+F usr/lib/opkg/info/xagent.list f865eabf5a113c75c93a594be259f691 644
+D usr/lib/pppd/2.4.9
+F usr/lib/pppd/2.4.9/dni-l2tp.so 0de1a349ab96dd7847483587fa9889b1 755
+F usr/lib/pppd/2.4.9/dni-pptp.so b02c29bba3453eda889b7ab93ad3af4c 755
+F usr/lib/pppd/2.4.9/rp-pppoe.so 8c35781b37770eea6a75ac3725323a9d 755
+D usr/lib/security
+F usr/lib/security/pam_access.so a9540635e729a7ce8affd71fdc302d67 755
+F usr/lib/security/pam_debug.so 509b1b7dee5732cbcfc2bf579973e03f 755
+F usr/lib/security/pam_deny.so c5fa07ee3b3b1f8fe61fd171945a5343 755
+F usr/lib/security/pam_echo.so 077db1c728364220bed9230961169790 755
+F usr/lib/security/pam_env.so 69fc402719e7d8e302cbb2e458acb1ec 755
+F usr/lib/security/pam_exec.so da40182c5b8d20a76043f28dd33353b6 755
+F usr/lib/security/pam_faildelay.so 47f8ad1e20d6e531b3c92e5c9a9a7078 755
+F usr/lib/security/pam_faillock.so 1746a3b5e897a4c49ffa4f66c2ba91ec 755
+D usr/lib/security/pam_filter
+F usr/lib/security/pam_filter.so 99758621551f8e1890ed033d3e67980f 755
+F usr/lib/security/pam_filter/upperLOWER da99b1c2a18c25f01da6dff096db8732 755
+F usr/lib/security/pam_ftp.so 8608344f5d5d608a9e5d23a9fb61eeb6 755
+F usr/lib/security/pam_group.so 63146e7d7e4442f426ac6d8764dbb258 755
+F usr/lib/security/pam_issue.so 6e255c55c4d759efb29316b417b3ddf2 755
+F usr/lib/security/pam_keyinit.so ba2b90a9e5705a17ca987206a5b3a1ef 755
+F usr/lib/security/pam_lastlog.so 499d08b3b34936634df7d0566349392f 755
+F usr/lib/security/pam_limits.so b1c51ff0b67f44dd75a3a960442a7115 755
+F usr/lib/security/pam_listfile.so 95ef5206539bc0dab8825b6bb29c718c 755
+F usr/lib/security/pam_localuser.so c5768e8ad5bd701c68cc5b6faf2f668b 755
+F usr/lib/security/pam_loginuid.so b0ffef95f2634505d9c4803e565d75e9 755
+F usr/lib/security/pam_mail.so e621063d090c0e0fda1923c64acf8a46 755
+F usr/lib/security/pam_mkhomedir.so 3723db9616fa9d3619933391b8a4de4d 755
+F usr/lib/security/pam_motd.so 20338b8962ac13fcef4a946c56ac0c80 755
+F usr/lib/security/pam_namespace.so 5c9d80db7eea9151c4f1ab4612c48495 755
+F usr/lib/security/pam_nologin.so e00b05f98ba5fd68821c32d36e17d64d 755
+F usr/lib/security/pam_permit.so f1b1164fe162c8092c2108f830d7549d 755
+F usr/lib/security/pam_pwhistory.so 3249f63ad00958312a1ba48f12e85e63 755
+F usr/lib/security/pam_rhosts.so e536dc38e4a07f4223145f8deecf67e4 755
+F usr/lib/security/pam_rootok.so 3bb84014350c1f651d57451914377d3a 755
+F usr/lib/security/pam_securetty.so 9a834eac4259c571a6c307621684a07b 755
+F usr/lib/security/pam_setquota.so 6d8b8078bb4604c9bbbd9cc6c9dfcdf0 755
+F usr/lib/security/pam_shells.so bb3ea996f968c7a98c2213d47766f517 755
+F usr/lib/security/pam_stress.so 467a6c389379d026cd229e6bf25fdc67 755
+F usr/lib/security/pam_succeed_if.so b703a68656614a769c74908f69297fa9 755
+F usr/lib/security/pam_time.so ec0f2c39059991a4433b3eaf0a46ba83 755
+F usr/lib/security/pam_timestamp.so 1efb78dbf14dcf8a114372faf9ce2d15 755
+F usr/lib/security/pam_umask.so 71c22fbee63a6c7e67d1b24bac52db10 755
+F usr/lib/security/pam_unix.so 1eb3d81ba470824eb86ea2ae04b3caa9 755
+F usr/lib/security/pam_usertype.so 3bb980a9742f3d8e6d9143bcb878600f 755
+F usr/lib/security/pam_warn.so 3f7d7c5dbf6e986acb1031814550aa48 755
+F usr/lib/security/pam_wheel.so 45609a715e1c1bca92739ebeeaadc117 755
+F usr/lib/security/pam_xauth.so 11948e895a5e34a269fea2fb864b108b 755
+F usr/sbin/80211stats 44bc4fc69f97aa02eced951a13ee0e64 755
+F usr/sbin/Qcmbr 8dd3b892ee265e8709c8bb77cdab92dc 755
+F usr/sbin/acd-run.sh 9c92db5db357950ed9bbe52c0ae300a9 755
+L usr/sbin/api ntgr_sw_api
+L usr/sbin/app-register ntgr_sw_api
+F usr/sbin/apstats 8ad8645d614352d80514a9e89c3405c2 755
+F usr/sbin/arlo_map_tracker.sh 2fc7d95321b4c1175d8b9dbbaba41600 755
+F usr/sbin/arlo_unicast.sh 4c3ad514de6419bdd8a02ef4ea406d3d 755
+F usr/sbin/assocdenialnotify 889002587d44d8c7000d261ba446331b 755
+F usr/sbin/athadhoc 66e977e3e0509b771f23f598c6b8d19f 755
+F usr/sbin/athdiag eebf851e68bc8b88d832bba04bda3696 755
+F usr/sbin/athstats db5ece328a4603d282cc84352e21b7fc 755
+F usr/sbin/athstatsclr 452708cac6fe35acb0ca78d330b939c0 755
+F usr/sbin/athtestcmd 9bf24cd8c8c5e9d3baa476a02db135d5 755
+F usr/sbin/boot-notification 76a0d1fe63da8a1e5f8d55944fbf1e14 755
+F usr/sbin/cfu-auto-check 7e3113a659d053b82da6e23ae8534d67 755
+F usr/sbin/check_dal_acl.sh a44aea00fb48d2cca5f6ebe7506c876a 755
+F usr/sbin/control-firmware d90a41c4101691482426b6080a8510e2 755
+F usr/sbin/dal-bst ceb6b37a72df2dff44011ef22dd8f3a9 755
+F usr/sbin/dal-set e9361c5d8e6344a47b5dd986fcd85f57 755
+L usr/sbin/dhcprelay ../../bin/busybox
+L usr/sbin/dlna ntgr_sw_api
+F usr/sbin/dni_block_chksum 774899aae2a5683477ba0d7c30fa2548 755
+F usr/sbin/exttool 0eda71ac66c1e09eb81fdf0a1c2acc78 755
+F usr/sbin/faillock 3b2d4d67ff9fa3a9971ea8621cb37c59 755
+L usr/sbin/firewall ntgr_sw_api
+L usr/sbin/fsfreeze ../../bin/busybox
+F usr/sbin/get_login_info.sh e04700b3a4693131c21dc9fd4d9290d6 755
+F usr/sbin/hostapd 6fbe2dc2058c6a23de51efceb48134f9 755
+F usr/sbin/hostapd_cli 24c36649b4e26eac6bf78c664881a452 755
+F usr/sbin/hyctl e3b2c2d2905b4c153a816ef410ec27e4 755
+F usr/sbin/hyd 6bb74b7a9d3d825920a7e93dc432e73f 755
+F usr/sbin/hyt f0d4d2f1b2413e316a41e2ea0bb1242d 755
+L usr/sbin/i2ctransfer ../../bin/busybox
+F usr/sbin/iface-mgr f732aa1386db0d73934bf36ab28409d1 755
+L usr/sbin/internet ntgr_sw_api
+F usr/sbin/lbd ada391a6b69a1810f0d888ef38ccaf45 755
+F usr/sbin/lbt eb467e4565882ef2c6d8b293dacb9b8d 755
+F usr/sbin/led-control.sh 87633f8d8ad00a51dfd92c276d627922 755
+F usr/sbin/mkhomedir_helper 42edc19dcfd9f8081abc1ad1ed7ab488 755
+L usr/sbin/nologin ../../bin/busybox
+L usr/sbin/nvconfig ntgr_sw_api
+F usr/sbin/onboarding_operation.sh 886323570d7962e5f9e35272976f9e9a 755
+F usr/sbin/pam_namespace_helper 71e2f8a1d4106b730062a656f38fe832 755
+F usr/sbin/pam_timestamp_check 420fffba55c7e1719f0867e48507b6c2 755
+L usr/sbin/partprobe ../../bin/busybox
+F usr/sbin/pktlogconf 726ae4bc2f1a2e200431baf5da9703fd 755
+F usr/sbin/pktlogdump fbfe4fb91590085865c285f8d90c979d 755
+F usr/sbin/pwhistory_helper cf8c4ed7c37c3ac3081f3b2363871a62 755
+F usr/sbin/qca_event_sample 2048a57f2211604cdda930b9435440c9 755
+F usr/sbin/radartool ac1c4edca7080ea9ad8d39c11c0deeaf 755
+F usr/sbin/repacd-detect_device_mode.sh 029e1c51bda1c2abc77919721125954d 755
+F usr/sbin/repacd-run.sh 0f831bcdd4c7b6d78ab21572cc565092 755
+F usr/sbin/rmdal-entry a9e0d272d3cde183e5658f0d237513d8 755
+F usr/sbin/spectraltool d13250f236866d8c4cea040edd1883a3 755
+F usr/sbin/ssidsteering 75a9677b7d6b30650d4f3962f582b527 755
+L usr/sbin/system ntgr_sw_api
+F usr/sbin/thermaltool 6491098b117864636d5d897264895940 755
+F usr/sbin/tri_band_detect.sh feb088fe3343cd7a26072f09502cd405 755
+F usr/sbin/tx99tool 29edf3a5f99973d10aea68cc5ec74f70 755
+F usr/sbin/ucpkgen 0db842e045b4f1fdfdf98fe21ff33f10 755
+F usr/sbin/unix_chkpwd cd53cf8f86ab0621fe3f8dd1f797e90b 755
+F usr/sbin/unix_update 6abc8fc501cc614bc9ad1391a8aaa23a 755
+F usr/sbin/verify_caldata 62fdc0a07a8861cead11a6aa64aa8d1e 755
+F usr/sbin/wifi-listener 88437df4a5a3f72a65b4bf3b9eafbdaa 755
+F usr/sbin/wifi_try b617505cd1c27e203d7a0dd952a20cdc 755
+F usr/sbin/wifitool 0a3791f38bdda2979f9725dc418697f9 755
+F usr/sbin/wlanconfig 3ac9443c536930e33a268149f0d12dfa 755
+F usr/sbin/wpa_cli 7ad67ac0c17458d3ee99891f67290cb1 755
+F usr/sbin/wpa_passphrase 6f336a70322773351a8bce9da60eee62 755
+F usr/sbin/wpa_supplicant ccfa3c085609f8dd0873fa9646f1622d 755
+F usr/sbin/wps_enhc ec7f9c816edb3406b8359e9103c5d061 755
+F usr/sbin/wsplcd f3475a913efc2c82086e733c1acadbea 755

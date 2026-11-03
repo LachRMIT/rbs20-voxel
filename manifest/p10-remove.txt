@@ -1,0 +1,13 @@
+# Paths removed from the GPL-built rootfs for the RBS20 satellite (P10).
+# Stock RBS20 2.7.6.6 ships without these too; they are router-only features.
+www
+lib/armor
+lib/circle
+usr/share/armor
+usr/bin/circled
+etc/rc.d/S90circle_init
+etc/rc.d/S94armor_init
+etc/rc.d/S96circlev1
+# Package init scripts that expect OpenWrt's uci/netifd; rbs20-extras starts these instead
+etc/rc.d/S60prometheus-node-exporter-lua
+etc/rc.d/S99vnstat

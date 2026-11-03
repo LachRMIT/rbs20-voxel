@@ -1,0 +1,62 @@
+#!/bin/sh
+# P10 housekeeping loop (started by /etc/init.d/rbs20-extras).
+#  - keeps SSH (22), the dashboard (8080) and node exporter (9100) LAN-only
+#  - sets the clock from the router, falling back to public NTP
+#  - adds new interfaces to vnstat
+#  - streams logs to a remote syslog server when one is configured:
+#      config set rbs20_syslog_host=192.168.1.10 ; config commit   (port: rbs20_syslog_port, default 514)
+
+CONFIG=/bin/config
+LAN=br0
+
+guard_ports() {
+	for p in 22 8080 9100; do
+		iptables -C INPUT ! -i $LAN -p tcp --dport $p -j DROP 2>/dev/null ||
+			iptables -I INPUT ! -i $LAN -p tcp --dport $p -j DROP
+	done
+}
+
+sync_time() {
+	[ "$(date +%Y)" -ge 2024 ] && [ -f /tmp/.rbs20_time_ok ] && return
+	gw=$(ip route 2>/dev/null | awk '/^default/ {print $3; exit}')
+	for s in $gw time.google.com pool.ntp.org; do
+		if ntpd -n -q -p "$s" >/dev/null 2>&1; then
+			touch /tmp/.rbs20_time_ok
+			logger -t rbs20-guard "clock set from $s"
+			return
+		fi
+	done
+}
+
+vnstat_ifaces() {
+	for i in $LAN $(ls /sys/class/net | grep -E '^(ath|eth)'); do
+		[ -f /var/lib/vnstat/$i ] || vnstat -u -i $i >/dev/null 2>&1
+	done
+}
+
+remote_log() {
+	host=$($CONFIG get rbs20_syslog_host)
+	port=$($CONFIG get rbs20_syslog_port); [ -n "$port" ] || port=514
+	pid=$(cat /var/run/logread-remote.pid 2>/dev/null)
+	want="$host:$port"
+	if [ -z "$host" ]; then
+		[ -n "$pid" ] && kill $pid 2>/dev/null && rm -f /var/run/logread-remote.pid /tmp/.rbs20_log_target
+		return
+	fi
+	if [ -z "$pid" ] || [ ! -d /proc/$pid ] || [ "$(cat /tmp/.rbs20_log_target 2>/dev/null)" != "$want" ]; then
+		[ -n "$pid" ] && kill $pid 2>/dev/null
+		start-stop-daemon -S -b -m -p /var/run/logread-remote.pid -x /sbin/logread -- \
+			-f -u -r "$host" "$port" -h "$(cat /tmp/board_model_id 2>/dev/null)-$(cat /sys/class/net/$LAN/address 2>/dev/null | tr -d :)"
+		echo "$want" > /tmp/.rbs20_log_target
+	fi
+}
+
+mkdir -p /var/lib/vnstat
+n=0
+while true; do
+	guard_ports
+	[ $((n % 10)) = 0 ] && { sync_time; vnstat_ifaces; }
+	remote_log
+	n=$((n + 1))
+	sleep 30
+done

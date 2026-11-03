@@ -1,0 +1,19 @@
+# Appended to NETGEAR's config/defconfig-orbi-micro by gpl/build-gpl.sh (P10).
+# Extra packages compiled from source (recipes in gpl/packages/)
+CONFIG_PACKAGE_dropbear=y
+CONFIG_DROPBEAR_CURVE25519=y
+CONFIG_PACKAGE_iperf3=y
+CONFIG_PACKAGE_nano=y
+CONFIG_PACKAGE_haveged=y
+CONFIG_PACKAGE_vnstat=y
+CONFIG_PACKAGE_htop=y
+CONFIG_PACKAGE_mtr=y
+CONFIG_PACKAGE_bmon=y
+CONFIG_PACKAGE_confuse=y
+CONFIG_PACKAGE_lua=y
+CONFIG_PACKAGE_liblua=y
+CONFIG_PACKAGE_luasocket=y
+CONFIG_PACKAGE_prometheus-node-exporter-lua=y
+# busybox ntpd (client only) for time sync from the router
+CONFIG_DNIBUSYBOX_CONFIG_NTPD=y
+# CONFIG_DNIBUSYBOX_CONFIG_FEATURE_NTPD_SERVER is not set

@@ -1,0 +1,21 @@
+#!/bin/sh /etc/rc.common
+# P10 extras: housekeeping loop, vnstat traffic history, Prometheus node exporter on :9100.
+
+START=99
+STOP=10
+
+start() {
+	mkdir -p /var/lib/vnstat
+	start-stop-daemon -S -b -m -p /var/run/rbs20-guard.pid -x /usr/sbin/rbs20-guard
+	vnstat -u -i br0 >/dev/null 2>&1
+	vnstatd -d >/dev/null 2>&1
+	start-stop-daemon -S -b -m -p /var/run/node-exporter.pid -x /usr/bin/lua -- \
+		/usr/bin/prometheus-node-exporter-lua --bind 0.0.0.0 --port 9100
+}
+
+stop() {
+	for p in rbs20-guard node-exporter logread-remote; do
+		start-stop-daemon -K -p /var/run/$p.pid 2>/dev/null
+	done
+	killall vnstatd 2>/dev/null
+}

@@ -78,3 +78,28 @@ def test_overlay_cgis_require_auth():
     for cgi in ('api.cgi', 'index.cgi'):
         text = read('overlay', 'www.syncmon', cgi)
         assert text.splitlines()[:2] == ['. /usr/share/syncmon/auth.sh', 'syncmon_auth'], cgi
+
+
+def p10_manifest(name):
+    for line in read('manifest', name).splitlines():
+        if line.strip() and not line.startswith('#'):
+            yield line.split()
+
+
+def test_p10_manifests_are_well_formed():
+    for name in ('stock-closed-files.txt', 'p10-donor-files.txt'):
+        for parts in p10_manifest(name):
+            kind = parts[0]
+            assert kind in ('F', 'L', 'D'), parts
+            if kind == 'F':
+                assert len(parts) == 4 and len(parts[2]) == 32 and parts[3].isdigit(), parts
+            elif kind == 'L':
+                assert len(parts) == 3, parts
+            else:
+                assert len(parts) == 2, parts
+
+
+def test_p10_has_no_fallback_password():
+    for rel in (('overlay-p10', 'etc', 'init.d', 'dropbear'), ('overlay-p10', 'usr', 'share', 'syncmon', 'auth.sh')):
+        text = read(*rel)
+        assert 'pw=password' not in text and '= password ]' not in text, rel
